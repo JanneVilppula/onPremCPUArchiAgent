@@ -1,0 +1,617 @@
+[
+    {
+        "id": "id-47e42b8c13044ca9987615bcd5cc3498",
+        "type": "element_description",
+        "text": "The archiAgent (ArchimateModel) is described as: 'nan'"
+    },
+    {
+        "id": "id-e92b2520dd5b4bccb40049ee349c62ea",
+        "type": "element_description",
+        "text": "The Consumer (BusinessActor) is described as: 'Consumers (Business Actor) are individuals that either buy product from eCom sites selecting logyCorp as delivery option, or send parcels to other individuals via logyCorp.'"
+    },
+    {
+        "id": "id-9892256d0e214fd7a3b378015d7dd64a",
+        "type": "element_description",
+        "text": "The Delivery Driver (BusinessActor) is described as: 'Delivery Driver (Business Actor) is a logyCorp employee that drives a van (first or last mile delivery) or lorry (linehaul between logyCorp terminals). Delivery Drivers use Mobile Scanners running Transport Management System.'"
+    },
+    {
+        "id": "id-1b8b11f603984be38629423f6e69beb0",
+        "type": "element_description",
+        "text": "The Warehouse Staff (BusinessActor) is described as: 'Warehouse Staff (Business Actor) is a logyCorp employee that handles parcels in terminals. Warehouse Staff use Mobile Scanners running logyCorp ERP.'"
+    },
+    {
+        "id": "id-bc94b46c98094148b0113a71c0b3e07c",
+        "type": "element_description",
+        "text": "The Buy product delivered from eCom (BusinessProcess) is described as: 'When consumers select logyCorp as delivery provider in eCom webshop, they can select the service point they would want their parcel delivered to buy inputting their desired location. By buying the product from eCom with logyCorp as the selected delivery provider, the consumer instructs the eCom to use logyCorp for delivery. The eCom, not the consumer, is the customer of the parcel delivery from logyCorp. logyCorp deliveres the parcel to the consumer, not the eCom.'"
+    },
+    {
+        "id": "id-343d3f1769a04e3db6860336a19449ca",
+        "type": "element_description",
+        "text": "The Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess) is described as: 'When consumer receives a fetch notification and fetch code, the consumer knows to go fetch their parcel from the parcel locker using the given fetch code. When the consumer has fetched their parcel from the parcel locker a \"Consignment fetched by consumer\" event log is created, ending the delivery.'"
+    },
+    {
+        "id": "id-058b9cfab72d4efa9477f2b6b244975b",
+        "type": "element_description",
+        "text": "The Load parcel from chute to route trolley cage (BusinessProcess) is described as: 'Warehouse Staff scan a parcel in the chute to find the trolley cage the parcel should be consolidated to. Warehouse Staff consolidate the parcel to a the designated trolley cage.'"
+    },
+    {
+        "id": "id-e8da6e0724ac4565856642cabec2ed42",
+        "type": "element_description",
+        "text": "The Load route trolley cage into vehicle and start delivery route (BusinessProcess) is described as: 'When delivery driver scans a trolley cage that returns consignment log with \"Ready for delivery\" for the delivery route of the delivery driver, the delivery driver loads the trolley cage into their vehicle using Mobile Scanner running Transport Management System. Delivery Driver loads trolleys storing consolidated parcels to vehicle for either linehaul to another logyCorp terminal or the last mile delivery to service point using Mobile Scanner running Transport Management System. Loading a consolidated unit to a vehicle records the \"loaded to delivery\" event to each parcel consolidated. '"
+    },
+    {
+        "id": "id-462411beb55d44168d2540fcd260c1c0",
+        "type": "element_description",
+        "text": "The Load trolley cage into vehicle (BusinessProcess) is described as: 'Delivery driver scans the consolidated trolley cage of parcels with Transport Management System run in Mobile Scanner as loaded to vehicle. '"
+    },
+    {
+        "id": "id-0fe1c0173a244e9fbc141714230ad1cb",
+        "type": "element_description",
+        "text": "The Shelve parcels into parcel locker (BusinessProcess) is described as: 'Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner. Parcel locker door is opened via an admin code known by delivery drivers. The delivery driver scans each parcel shelved into a parcel locker with the Mobile Scanner running Transport Management System to log \"At service point\" status to the parcel. Transport Management System stores the status in logyCorp ERP consignment event log.'"
+    },
+    {
+        "id": "id-9fd60d83ac5d4034a9c2a28d750adfb6",
+        "type": "element_description",
+        "text": "The Unload trolley cage's parcels into sorter (BusinessProcess) is described as: 'When the delivery driver delivers a trolley cage to logyCorp terminal, logyCorp's warehouse staff unload the trolley cage's parcels into the terminal's sorter.'"
+    },
+    {
+        "id": "id-36aef7017bb54a75b437d5d000f41bfb",
+        "type": "element_description",
+        "text": "The eCom platform (ApplicationComponent) is described as: 'eCom platforms (external Application Components are usually Shopify or WooCommerce. Larger eCom businesses usually create their own eCom platform, often heavily dependent on their ERP system. Smaller eCom businesses start with just eCom platforms and do custom business processess (like making a transport order to logyCorp) manually.'"
+    },
+    {
+        "id": "id-cf26ff3812194954ac8d3d8259be3383",
+        "type": "element_description",
+        "text": "The eCom's ERP (ApplicationComponent) is described as: 'eCom's ERP (Application Component) is often a Warehouse Management System (WMS) that maintains the eCom's warehouse stock of products. Larger eCom's usually treat the eCom platform as an I/O slave to their WMS. Smaller eCom's usually use their eCom platform as WMS (e.g., to store warehouse stock). '"
+    },
+    {
+        "id": "id-e658c32b647d45c6b256bc71ec0a3692",
+        "type": "element_description",
+        "text": "The logyCorp ERP (ApplicationComponent) is described as: 'logyCorp ERP (Application Component) is a Java Monolith with a monolithic relational database. Using a three-layer architecture (Interface, Business Logic, Database), the ERP takes input from several systems (e.g., Transport Management System) and interfaces (Service Point API, Orders API, Notifications API), processess them with its business logic, and then stores in the database. This ensures that the master state is in the ERP's database, that the master business logic is the ERP's, and all systems recording consignment status events (e.g., Transport Management System, Orders API, Sorter, Mobile Scanner, Parcel Locker, etc.) will be centralised in the logyCorp ERP. These systems will also not have their own state of consignments, acting as I/O slaves of the ERP. logyCorp is hosted on AWS EC2-instances, load balanced with AWS ELB.'"
+    },
+    {
+        "id": "id-801c6ffcd7b945e98574f4b4bfbcaee7",
+        "type": "element_description",
+        "text": "The SMS Gateway service (ApplicationComponent) is described as: 'SMS Gateway service (Application Component) is a SaaS-service for sending SMS messages, used by Notifications API. SMS Gateway only sends, does not receive, SMS messages.'"
+    },
+    {
+        "id": "id-4eece93cdf324044a7a1a67e06532b40",
+        "type": "element_description",
+        "text": "The Transport Management System (ApplicationComponent) is described as: 'Transport Management System (Application Component) is a separate system from logyCorp ERP but all consignment data is stored solely in logyCorp ERP and fetched from there. Transport Management System creates routes, their stops, and stores delivery driver events logged from Mobile Scanners.'"
+    },
+    {
+        "id": "id-3e250ffd4ada4efcaab40e5bdcb1a1d5",
+        "type": "element_description",
+        "text": "The Consignment at service point (ApplicationEvent) is described as: '\"At service point\" status will be added as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-8a0fdfcb56ba4541b80c0306002bd0e2",
+        "type": "element_description",
+        "text": "The Consignment consolidated (ApplicationEvent) is described as: '\"Consolidated\" status and one-to-many foreign key with the consolidation id of the delivery trolley cage, stored in logyCorp ERP, will be added as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-d1b1aa026fc34723bdf53e28b4ca9e49",
+        "type": "element_description",
+        "text": "The Consignment created (ApplicationEvent) is described as: '\"Created\" status will be added as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-a3f02044446a4ac2907c0c4a2a548386",
+        "type": "element_description",
+        "text": "The Consignment fetch notified (ApplicationEvent) is described as: '\"Fetch notified\" status will be added as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-50985de30af64e1bbb87a0ac47e84920",
+        "type": "element_description",
+        "text": "The Consignment fetched by consumer (ApplicationEvent) is described as: '\"Fetched by consumer\" status will be added as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-0f25c14fce9947d6a7a140fa6abd6426",
+        "type": "element_description",
+        "text": "The Consignment fetched from warehouse (ApplicationEvent) is described as: '\"Fetched from warehouse\" status will be added retroactively once the parcel is scanned by sorter as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-9175f39a0eae480e8838c1e639807d8d",
+        "type": "element_description",
+        "text": "The Consignment measured (ApplicationEvent) is described as: '\"Measured\" status and measures will be added as the newest event in the consignment event log. '"
+    },
+    {
+        "id": "id-c546c9bb32894e889312b8a99e5c6a59",
+        "type": "element_description",
+        "text": "The Consignment ready for delivery (ApplicationEvent) is described as: '\"Ready for delivery\" status will be added as the newest event in the consignment event log.'"
+    },
+    {
+        "id": "id-ec78c4ba48624cd2aede15a70189bfdd",
+        "type": "element_description",
+        "text": "The Consignment sorted (ApplicationEvent) is described as: '\"Sorted\" status will be added as the newest event in the consignment event log. '"
+    },
+    {
+        "id": "id-420056dfa61e4e0fbe3a3299d173f2b5",
+        "type": "element_description",
+        "text": "The Notifications API (ApplicationInterface) is described as: 'Notifications API (Application Interface) handles SMS Gateways, emails, and alerts in partner systems for logyCorp ERP. Notifications API is a REST API of logyCorp ERP. logyCorp ERP sends, for example, fetch code and notification SMS to consumer via Notifications API through using SMS Gateway service. Notifications API only sends, does not receive, messages.'"
+    },
+    {
+        "id": "id-87ec15d8a64546289876d6600eafd035",
+        "type": "element_description",
+        "text": "The Orders API (ApplicationInterface) is described as: 'Orders API (Application Interface) collect consignment orders from either eComs or logyCorp's internal services. Orders API is a REST API that serves the logyCorp ERP with an CRUD operation to an order. Creating an order will make a new consignment in the logyCorp ERP. Reading an order will return its status events. Updating an order will update the service point, consumer information, eCom information, delivery product, or deactivate the delivery. Deleting an order will delete the record of the order. Consignment events are recorded via point-to-point APIs beween logyCorp ERP and systems.'"
+    },
+    {
+        "id": "id-e74ea56febfc46cd80d2d7e97215e19a",
+        "type": "element_description",
+        "text": "The Service Point API (ApplicationInterface) is described as: 'Service Point API (Application Interface) serves the eCom platform service points closest to the selected address. Service Point API is a REST API of logyCorp ERP. The eCom platform often utilises the by showing taking the address as input on the website from the consumer and showing the output service points to the consumer in the website. The eCom platform will bind the consumer's selected service point as the location where the transport order will be delivered to.'"
+    },
+    {
+        "id": "id-fcfd5cd8de564744afc583ac2e33e63b",
+        "type": "element_description",
+        "text": "The Create consignment (ApplicationProcess) is described as: 'Consignment is created by calling the Orders API. Orders API can be called by logyCorp's internal services or eComs. Creating a consignment sets consignment event to \"created\".'"
+    },
+    {
+        "id": "id-33c2a5cb773e480da81ac7fadc1772f4",
+        "type": "element_description",
+        "text": "The Create transport order (ApplicationProcess) is described as: 'Transport order is the eCom's record of a product needing to be delivered; a promise to create a consignment with logyCorp - logyCorp does not know of the eCom's transport orders before they become consigments via the Orders API. Transport order compiles consumer service point and contact details needed for creating a consignment.'"
+    },
+    {
+        "id": "id-6a9116fb62914b6f966fa40a3e7dcc58",
+        "type": "element_description",
+        "text": "The Create transport stop (ApplicationProcess) is described as: 'Transport Management System creates a transport stop for the consignment triggered by the logyCorp ERP when a consignment is created.'"
+    },
+    {
+        "id": "id-0c4a0f0066ec4502b5aab0549f4e61a6",
+        "type": "element_description",
+        "text": "The Notify of fetchable parcel and fetch code (ApplicationProcess) is described as: 'When consignment is at \"At service point\" status, logyCorp ERP sends a notification and fetch code to the consumer via Notifications API using SMS Gateway service. When the Notifications API confirms a successful message delivery to logyCorp ERP, logyCorp ERP creates a \"Consignment fetch is notified\" event log.'"
+    },
+    {
+        "id": "id-52e37c3f8a824a5d81176562bc165cb5",
+        "type": "element_description",
+        "text": "The Mobile Scanner (Equipment) is described as: 'Mobile Scanners are MDM-managed Android phones running logyCorp ERP for warehouse staff and Transport Management System for delivery drivers.'"
+    },
+    {
+        "id": "id-2c9bcd560a6b448b810e2d5cc2a8a718",
+        "type": "element_description",
+        "text": "The Parcel Locker (Equipment) is described as: 'Parcel Locker (Equipment) is a logyCorp service point type. logyCorp has parcel lockers and parcel stores as service points. Consignments are loaded to parcel lockers by delivery drivers and consignments are fetched from parcel lockers by consumers who have the consigments fetch code, generated and sent bt logyCorp ERP. '"
+    },
+    {
+        "id": "id-9b9786d4714f4ef98e044cee5511e69c",
+        "type": "element_description",
+        "text": "The Sorter (Equipment) is described as: 'Sorter (Equipment) is a terminal spanning conveyor belt with chutes. The input of the sorter stores a measure of parcel's dimensions (cubes) to logyCorp ERP  and scans it to read the parcel's delivery postcode from logyCorp ERP. logyCorp ERP maintains a postcode-chute reference table for each sorter that sorters query. The sorter pushes the parcel to the correct chute on the conveyor belt. From the chute warehouse staff read parcels with mobile scanners running logyCorp ERP to find the trolley cage the parcel should be consolidated to.'"
+    },
+    {
+        "id": "id-71f3879900434b9cba609611cf4f2334",
+        "type": "relation_description",
+        "text": "The Consumer (BusinessActor) has AssignmentRelationship with Buy product delivered from eCom (BusinessProcess)The relation is described as: 'Consumer buys a product from eCom'"
+    },
+    {
+        "id": "id-44e68744fb6a4459a41de3fba9bd80f8",
+        "type": "relation_description",
+        "text": "The Consumer (BusinessActor) has AssignmentRelationship with Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess)The relation is described as: 'Consumer fetches parcel from parcel locker using fetch code'"
+    },
+    {
+        "id": "id-457cb0a7a8cb4d8ab3da941933269254",
+        "type": "relation_description",
+        "text": "The Delivery Driver (BusinessActor) has AssignmentRelationship with Load route trolley cage into vehicle and start delivery route (BusinessProcess)The relation is described as: 'Delivery Driver uses Mobile Scanner running Transportation Management System to scan whether the route delivery trolley cage next to their loading bay is for their delivery route. If yes, Delivery Driver uses Mobile Scanner running Transportation Management System to load trolley cage into vehicle. Once all trolley cages are loaded to vehicle, marks delivery route drive to have started on delivery driver starts driving delivery route on Mobile Scanner running Transport Management System '"
+    },
+    {
+        "id": "id-3c2772b115fd4d1f8dc4ad960a49db14",
+        "type": "relation_description",
+        "text": "The Delivery Driver (BusinessActor) has AssignmentRelationship with Load trolley cage into vehicle (BusinessProcess)The relation is described as: 'Delivery Driver loads trolley cage from eCom's warehouse to delivery van using Mobile Scanner running Transport Management System'"
+    },
+    {
+        "id": "id-64cba11f5ba94a509bf6ecd1104cb481",
+        "type": "relation_description",
+        "text": "The Delivery Driver (BusinessActor) has AssignmentRelationship with Shelve parcels into parcel locker (BusinessProcess)The relation is described as: 'Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner'"
+    },
+    {
+        "id": "id-2628b493f7fa428f8cf237190b81d0cd",
+        "type": "relation_description",
+        "text": "The Warehouse Staff (BusinessActor) has AssignmentRelationship with Load parcel from chute to route trolley cage (BusinessProcess)The relation is described as: 'Warehouse Staff scan a parcel in the chute to find the trolley cage the parcel should be consolidated to. Warehouse Staff consolidate the parcel to a the designated trolley cage.'"
+    },
+    {
+        "id": "id-eabee61dd7fc48059456c898c29af38a",
+        "type": "relation_description",
+        "text": "The Warehouse Staff (BusinessActor) has AssignmentRelationship with Unload trolley cage's parcels into sorter (BusinessProcess)The relation is described as: 'Warehouse Staff unload the delivery van's trolley cage's from eCom warehouses and unload their parcels into the sorter that scans and measures them'"
+    },
+    {
+        "id": "id-fffb8d74a3504b1ab4c0c35816badff1",
+        "type": "relation_description",
+        "text": "The eCom platform (ApplicationComponent) has FlowRelationship with eCom's ERP (ApplicationComponent)The relation is described as: 'if eCom has ERP, that ERP makes the order to logyCorp's Order API from the information the consumer selected in the eCom platform GUI'"
+    },
+    {
+        "id": "id-59c6aeb8d5714e849506dcaad08d0d21",
+        "type": "relation_description",
+        "text": "The eCom's ERP (ApplicationComponent) has FlowRelationship with Orders API (ApplicationInterface)The relation is described as: 'eCom's ERP automatically populates the Orders API call - the eCom can either automatically trigger or manually approve these Orders API calls '"
+    },
+    {
+        "id": "id-3095b3e3c5a54347a1ed73e6dc2c73ce",
+        "type": "relation_description",
+        "text": "The logyCorp ERP (ApplicationComponent) has FlowRelationship with Sorter (Equipment)The relation is described as: 'The sorter gets the parcel's chute from logyCorp ERP'"
+    },
+    {
+        "id": "id-d16d3c3da30746bba6818ec3ac9067db",
+        "type": "relation_description",
+        "text": "The logyCorp ERP (ApplicationComponent) has FlowRelationship with Transport Management System (ApplicationComponent)The relation is described as: 'logyCorp ERP is the master for consignment info and relays it to Transport Management System'"
+    },
+    {
+        "id": "id-6b1823b283334a3a926ca75da7053f50",
+        "type": "relation_description",
+        "text": "The Mobile Scanner (Equipment) has FlowRelationship with logyCorp ERP (ApplicationComponent)The relation is described as: 'When Mobile Scanner is running logyCorp ERP all events with Mobile Scanner are passed to logyCorp ERP'"
+    },
+    {
+        "id": "id-d44052f5918c41acb1a9a5bedb2966bb",
+        "type": "relation_description",
+        "text": "The Mobile Scanner (Equipment) has FlowRelationship with Transport Management System (ApplicationComponent)The relation is described as: 'When Mobile Scanner is running Transport Management System all events with Mobile Scanner are passed to Transport Management System'"
+    },
+    {
+        "id": "id-cfe1e466d4b045a3ae12788a0f8cb912",
+        "type": "relation_description",
+        "text": "The Notifications API (ApplicationInterface) has FlowRelationship with SMS Gateway service (ApplicationComponent)The relation is described as: 'Notifications API (Application Interface) handles SMS Gateway service for logyCorp ERP'"
+    },
+    {
+        "id": "id-91700e0d23c84ddaa74a0c35dcc0802c",
+        "type": "relation_description",
+        "text": "The Orders API (ApplicationInterface) has FlowRelationship with logyCorp ERP (ApplicationComponent)The relation is described as: 'When Orders API receives a call, it relays it t logyCorp ERP to create a consignment'"
+    },
+    {
+        "id": "id-3634d23fac3c4a1bb377f41823a1c4a6",
+        "type": "relation_description",
+        "text": "The Parcel Locker (Equipment) has FlowRelationship with logyCorp ERP (ApplicationComponent)The relation is described as: 'Parcel locker updated logyCorp ERP when users have opened parcel locker doors to remove or add parcels'"
+    },
+    {
+        "id": "id-1634d106a0744977a7b62d1182d84240",
+        "type": "relation_description",
+        "text": "The Sorter (Equipment) has FlowRelationship with logyCorp ERP (ApplicationComponent)The relation is described as: 'The sorter stores the parcel's measure and sorting status to logyCorp ERP consignment event log'"
+    },
+    {
+        "id": "id-5bc1f1144ce64207b04a9017e1e19eb7",
+        "type": "relation_description",
+        "text": "The Transport Management System (ApplicationComponent) has FlowRelationship with logyCorp ERP (ApplicationComponent)The relation is described as: ''"
+    },
+    {
+        "id": "id-c52dc215c9934d298ffc3a9301b8143a",
+        "type": "relation_description",
+        "text": "The eCom platform (ApplicationComponent) has ServingRelationship with Buy product delivered from eCom (BusinessProcess)The relation is described as: 'eCom platform is the website where consumer buys products'"
+    },
+    {
+        "id": "id-3d6f6ce143b64d56b3d393dec1628ddc",
+        "type": "relation_description",
+        "text": "The eCom's ERP (ApplicationComponent) has ServingRelationship with Create transport order (ApplicationProcess)The relation is described as: 'eCom's transport orders to logyCorp are stored in eCom's ERP'"
+    },
+    {
+        "id": "id-d22f3c859a65438f91c7183678563e37",
+        "type": "relation_description",
+        "text": "The logyCorp ERP (ApplicationComponent) has ServingRelationship with Notifications API (ApplicationInterface)The relation is described as: 'Notifications API is a REST API hosted by logyCorp ERP'"
+    },
+    {
+        "id": "id-4fecd9df10db490396b103ffdb0d8ac5",
+        "type": "relation_description",
+        "text": "The logyCorp ERP (ApplicationComponent) has ServingRelationship with Orders API (ApplicationInterface)The relation is described as: 'logyCorp ERP stores all consignments and products and hosts Orders API'"
+    },
+    {
+        "id": "id-f6f205bd59d0490f850ebba1a808beaa",
+        "type": "relation_description",
+        "text": "The logyCorp ERP (ApplicationComponent) has ServingRelationship with Service Point API (ApplicationInterface)The relation is described as: 'logyCorp stores all service points and hosts Service Point API'"
+    },
+    {
+        "id": "id-a39a13c36a724d418ad478d53824064e",
+        "type": "relation_description",
+        "text": "The Mobile Scanner (Equipment) has ServingRelationship with Load parcel from chute to route trolley cage (BusinessProcess)The relation is described as: 'Warehouse staff scan parcels in chute and consolidate to route trolley cage using Mobile Scanner running logyCorp ERP'"
+    },
+    {
+        "id": "id-c04b91e7530e48e9be56060c64eef853",
+        "type": "relation_description",
+        "text": "The Mobile Scanner (Equipment) has ServingRelationship with Load route trolley cage into vehicle and start delivery route (BusinessProcess)The relation is described as: 'Delivery Driver is using Mobile Scanner running Transport Management System to load trolley cage into vehicle. Once all trolley cages are loaded to vehicle, marks delivery route drive to have started on delivery driver starts driving delivery route on Mobile Scanner running Transport Management System '"
+    },
+    {
+        "id": "id-1e78b88a660142998d40ec2855098d33",
+        "type": "relation_description",
+        "text": "The Mobile Scanner (Equipment) has ServingRelationship with Load trolley cage into vehicle (BusinessProcess)The relation is described as: 'Delivery Driver is using Mobile Scanner running Transport Management System to load trolley cage into vehicle'"
+    },
+    {
+        "id": "id-504a53a2a1854a87bc291e007b809a1a",
+        "type": "relation_description",
+        "text": "The Mobile Scanner (Equipment) has ServingRelationship with Shelve parcels into parcel locker (BusinessProcess)The relation is described as: 'Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner'"
+    },
+    {
+        "id": "id-69c9f67aa3ab41f1a8756b9b6b6a25d1",
+        "type": "relation_description",
+        "text": "The Orders API (ApplicationInterface) has ServingRelationship with Create consignment (ApplicationProcess)The relation is described as: 'Orders API is the interface from where a consignment is created'"
+    },
+    {
+        "id": "id-cc209a118a2b4464b644fdbd30fe0bb7",
+        "type": "relation_description",
+        "text": "The Parcel Locker (Equipment) has ServingRelationship with Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess)The relation is described as: 'The consumer uses the parcel locker's screen to input their fetch code that opens the parcel locker door where their parcel is shelved'"
+    },
+    {
+        "id": "id-7bbae28cf11b4f52a68c5cdd1d5cd5d0",
+        "type": "relation_description",
+        "text": "The Parcel Locker (Equipment) has ServingRelationship with Shelve parcels into parcel locker (BusinessProcess)The relation is described as: 'Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner'"
+    },
+    {
+        "id": "id-78098fe6ebdd4742a7b36876bdcc7c30",
+        "type": "relation_description",
+        "text": "The Service Point API (ApplicationInterface) has ServingRelationship with eCom platform (ApplicationComponent)The relation is described as: 'eCom platform calls Service Point API to show consumers the service points closest to them to select for delivery location'"
+    },
+    {
+        "id": "id-ef32f6cb267f4ca1828b4bbd7ad865d0",
+        "type": "relation_description",
+        "text": "The SMS Gateway service (ApplicationComponent) has ServingRelationship with Notify of fetchable parcel and fetch code (ApplicationProcess)The relation is described as: 'SMS Gateway service notifies of fetchable parcel and fetch code'"
+    },
+    {
+        "id": "id-ab4d1b9f956d4719b77736bb3ecc713c",
+        "type": "relation_description",
+        "text": "The Sorter (Equipment) has ServingRelationship with Unload trolley cage's parcels into sorter (BusinessProcess)The relation is described as: 'Sorter measures and scans the parcel. Measures and sorting are stored in logyCorp ERP consignment event log'"
+    },
+    {
+        "id": "id-294be643a38b4cd09feae8f4614349a4",
+        "type": "relation_description",
+        "text": "The Transport Management System (ApplicationComponent) has ServingRelationship with Create transport stop (ApplicationProcess)The relation is described as: 'A stop is created by Transport Management System automatically'"
+    },
+    {
+        "id": "id-3ba4a50cf271473cba005087658825e0",
+        "type": "relation_description",
+        "text": "The Buy product delivered from eCom (BusinessProcess) has TriggeringRelationship with Create transport order (ApplicationProcess)The relation is described as: 'When a consumer buys a product in a eCom site, the eCom promises to deliver the product to consumer'"
+    },
+    {
+        "id": "id-4c8b2d0b0d034b61b74499204ca704cb",
+        "type": "relation_description",
+        "text": "The Consignment at service point (ApplicationEvent) has TriggeringRelationship with Notify of fetchable parcel and fetch code (ApplicationProcess)The relation is described as: 'When consignment is \"at service point\" log event, logyCorp ERP sends fetch notification to consumer'"
+    },
+    {
+        "id": "id-f507beb8df194e469237017351890fdb",
+        "type": "relation_description",
+        "text": "The Consignment created (ApplicationEvent) has TriggeringRelationship with Create transport stop (ApplicationProcess)The relation is described as: 'When consignment is at \"created\" status a transport stop is created'"
+    },
+    {
+        "id": "id-82d8cd06f6364fd19a197aec55ad442e",
+        "type": "relation_description",
+        "text": "The Consignment fetch notified (ApplicationEvent) has TriggeringRelationship with Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess)The relation is described as: 'When consumer receives a fetch notification and fetch code, the consumer knows to go fetch their parcel from the parcel locker using the given fetch code'"
+    },
+    {
+        "id": "id-abdbf23303ab447388d0be26f7793532",
+        "type": "relation_description",
+        "text": "The Consignment ready for delivery (ApplicationEvent) has TriggeringRelationship with Load route trolley cage into vehicle and start delivery route (BusinessProcess)The relation is described as: 'When delivery driver scans a trolley cage that returns consignment log with \"Ready for delivery\" for the delivery route of the delivery driver, the delivery driver loads the trolley cage into their vehicle using Mobile Scanner running Transport Management System'"
+    },
+    {
+        "id": "id-d0a01cceec524fffa8e696078d5f1e96",
+        "type": "relation_description",
+        "text": "The Consignment sorted (ApplicationEvent) has TriggeringRelationship with Load parcel from chute to route trolley cage (BusinessProcess)The relation is described as: 'When consignment is at \"sorted\" status logyCorp ERP assigns trolley cage code to the parcel, which warehouse staff scan with mobile scanners running logyCorp ERP from the parcel'"
+    },
+    {
+        "id": "id-74c00b62c80b4c409757a5d2cd3fc3bd",
+        "type": "relation_description",
+        "text": "The Create consignment (ApplicationProcess) has TriggeringRelationship with Consignment created (ApplicationEvent)The relation is described as: 'Creating a consignment stores a \"Created\" log event.'"
+    },
+    {
+        "id": "id-4587c0c99a2c4fe8be822e3885ab2cc0",
+        "type": "relation_description",
+        "text": "The Create transport order (ApplicationProcess) has TriggeringRelationship with Create consignment (ApplicationProcess)The relation is described as: 'Transport orders are realised for logyCorp by a created consignment via Orders API'"
+    },
+    {
+        "id": "id-5ceedd412db6426e847aa7e5bc7cdfa1",
+        "type": "relation_description",
+        "text": "The Create transport stop (ApplicationProcess) has TriggeringRelationship with Load trolley cage into vehicle (BusinessProcess)The relation is described as: 'When a delivery driver drives a Transport Management System created route consisting of stops, one of those stops will be a the consignment'"
+    },
+    {
+        "id": "id-22e33db589dd42f7a6184d5a4af2c8fc",
+        "type": "relation_description",
+        "text": "The Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess) has TriggeringRelationship with Consignment fetched by consumer (ApplicationEvent)The relation is described as: 'When the consumer has fetched their parcel from the parcel locker a \"Consignment fetched by consumer\" event log is created, ending the delivery.'"
+    },
+    {
+        "id": "id-eec5fb6f8d29409a934e76352ef9f99a",
+        "type": "relation_description",
+        "text": "The Load parcel from chute to route trolley cage (BusinessProcess) has TriggeringRelationship with Consignment consolidated (ApplicationEvent)The relation is described as: ''"
+    },
+    {
+        "id": "id-1ca191c7769f464aa20224a47d9fc883",
+        "type": "relation_description",
+        "text": "The Load parcel from chute to route trolley cage (BusinessProcess) has TriggeringRelationship with Consignment ready for delivery (ApplicationEvent)The relation is described as: 'When a parcel is loaded to the route trolley cage, the consignment event status log \"Ready for delivery\" is added'"
+    },
+    {
+        "id": "id-36de0bef01294b99980ef9fb2e3159ad",
+        "type": "relation_description",
+        "text": "The Load route trolley cage into vehicle and start delivery route (BusinessProcess) has TriggeringRelationship with Shelve parcels into parcel locker (BusinessProcess)The relation is described as: 'Once delivery route is at consignment's transport stop, Mobile Scanner running Transport Management System tells delivery driver which trolley cages is to be shelved into the stop's parcel locker'"
+    },
+    {
+        "id": "id-593696bfe0ad4bc88903167a6e4811e7",
+        "type": "relation_description",
+        "text": "The Load trolley cage into vehicle (BusinessProcess) has TriggeringRelationship with Unload trolley cage's parcels into sorter (BusinessProcess)The relation is described as: 'Every delivery route starts and terminates at the logyCorp terminal, so the fetched parcel will arrive at logyCorp terminal as terminus where it will be unloaded to a sorter'"
+    },
+    {
+        "id": "id-0e08a490d08a4e3299f1cb2ab354b7a5",
+        "type": "relation_description",
+        "text": "The Notify of fetchable parcel and fetch code (ApplicationProcess) has TriggeringRelationship with Consignment fetch notified (ApplicationEvent)The relation is described as: 'When a notification is sent, logyCorp ERP stores consignment event log as \"fetch notified\"'"
+    },
+    {
+        "id": "id-c186c3ae42214d7494a10da63a03b124",
+        "type": "relation_description",
+        "text": "The Shelve parcels into parcel locker (BusinessProcess) has TriggeringRelationship with Consignment at service point (ApplicationEvent)The relation is described as: 'When delivery driver logs in Mobile Scanner running Transport Management Systems that a parcel is shelved into a parcel locker, logyCorp ERP creates consignment event log status \"At service point\"'"
+    },
+    {
+        "id": "id-b0657e64c591472c8e0ef854bbea067e",
+        "type": "relation_description",
+        "text": "The Unload trolley cage's parcels into sorter (BusinessProcess) has TriggeringRelationship with Consignment fetched from warehouse (ApplicationEvent)The relation is described as: 'Because what consignments the eCom warehouse's trolley cage contains aren't known to logyCorp ERP, only once parcels are unloaded into a sorter that scans them can \"Fetched from warehouse\" status be retroactively logged to the consignment.'"
+    },
+    {
+        "id": "id-67b319e83acc4922ab4f545bf30e9f17",
+        "type": "relation_description",
+        "text": "The Unload trolley cage's parcels into sorter (BusinessProcess) has TriggeringRelationship with Consignment measured (ApplicationEvent)The relation is described as: 'The sorter stores \"Measured\" status and measures in logyCorp ERP consignment event log'"
+    },
+    {
+        "id": "id-7d2f7ce9651c404486e8a5f1ac6e8162",
+        "type": "relation_description",
+        "text": "The Unload trolley cage's parcels into sorter (BusinessProcess) has TriggeringRelationship with Consignment sorted (ApplicationEvent)The relation is described as: 'The sorter stores \"Sorted\" status in logyCorp ERP consignment event log'"
+    },
+    {
+        "id": "fact-element-id-47e42b8c13044ca9987615bcd5cc3498",
+        "type": "element-relation_description",
+        "text": "The archiAgent (ArchimateModel) is described as: 'nan'. archiAgent is also involved in connections: "
+    },
+    {
+        "id": "fact-element-id-e92b2520dd5b4bccb40049ee349c62ea",
+        "type": "element-relation_description",
+        "text": "The Consumer (BusinessActor) is described as: 'Consumers (Business Actor) are individuals that either buy product from eCom sites selecting logyCorp as delivery option, or send parcels to other individuals via logyCorp.'. Consumer is also involved in connections: It AssignmentRelationship the Buy product delivered from eCom (BusinessProcess). It AssignmentRelationship the Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-9892256d0e214fd7a3b378015d7dd64a",
+        "type": "element-relation_description",
+        "text": "The Delivery Driver (BusinessActor) is described as: 'Delivery Driver (Business Actor) is a logyCorp employee that drives a van (first or last mile delivery) or lorry (linehaul between logyCorp terminals). Delivery Drivers use Mobile Scanners running Transport Management System.'. Delivery Driver is also involved in connections: It AssignmentRelationship the Load route trolley cage into vehicle and start delivery route (BusinessProcess). It AssignmentRelationship the Load trolley cage into vehicle (BusinessProcess). It AssignmentRelationship the Shelve parcels into parcel locker (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-1b8b11f603984be38629423f6e69beb0",
+        "type": "element-relation_description",
+        "text": "The Warehouse Staff (BusinessActor) is described as: 'Warehouse Staff (Business Actor) is a logyCorp employee that handles parcels in terminals. Warehouse Staff use Mobile Scanners running logyCorp ERP.'. Warehouse Staff is also involved in connections: It AssignmentRelationship the Load parcel from chute to route trolley cage (BusinessProcess). It AssignmentRelationship the Unload trolley cage's parcels into sorter (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-bc94b46c98094148b0113a71c0b3e07c",
+        "type": "element-relation_description",
+        "text": "The Buy product delivered from eCom (BusinessProcess) is described as: 'When consumers select logyCorp as delivery provider in eCom webshop, they can select the service point they would want their parcel delivered to buy inputting their desired location. By buying the product from eCom with logyCorp as the selected delivery provider, the consumer instructs the eCom to use logyCorp for delivery. The eCom, not the consumer, is the customer of the parcel delivery from logyCorp. logyCorp deliveres the parcel to the consumer, not the eCom.'. Buy product delivered from eCom is also involved in connections: It TriggeringRelationship the Create transport order (ApplicationProcess). It is AssignmentRelationship by the Consumer (BusinessActor). It is ServingRelationship by the eCom platform (ApplicationComponent)."
+    },
+    {
+        "id": "fact-element-id-343d3f1769a04e3db6860336a19449ca",
+        "type": "element-relation_description",
+        "text": "The Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess) is described as: 'When consumer receives a fetch notification and fetch code, the consumer knows to go fetch their parcel from the parcel locker using the given fetch code. When the consumer has fetched their parcel from the parcel locker a \"Consignment fetched by consumer\" event log is created, ending the delivery.'. Fetch parcel from parcel locker stated using fetch code stated is also involved in connections: It TriggeringRelationship the Consignment fetched by consumer (ApplicationEvent). It is AssignmentRelationship by the Consumer (BusinessActor). It is ServingRelationship by the Parcel Locker (Equipment). It is TriggeringRelationship by the Consignment fetch notified (ApplicationEvent)."
+    },
+    {
+        "id": "fact-element-id-058b9cfab72d4efa9477f2b6b244975b",
+        "type": "element-relation_description",
+        "text": "The Load parcel from chute to route trolley cage (BusinessProcess) is described as: 'Warehouse Staff scan a parcel in the chute to find the trolley cage the parcel should be consolidated to. Warehouse Staff consolidate the parcel to a the designated trolley cage.'. Load parcel from chute to route trolley cage is also involved in connections: It TriggeringRelationship the Consignment consolidated (ApplicationEvent). It TriggeringRelationship the Consignment ready for delivery (ApplicationEvent). It is AssignmentRelationship by the Warehouse Staff (BusinessActor). It is ServingRelationship by the Mobile Scanner (Equipment). It is TriggeringRelationship by the Consignment sorted (ApplicationEvent)."
+    },
+    {
+        "id": "fact-element-id-e8da6e0724ac4565856642cabec2ed42",
+        "type": "element-relation_description",
+        "text": "The Load route trolley cage into vehicle and start delivery route (BusinessProcess) is described as: 'When delivery driver scans a trolley cage that returns consignment log with \"Ready for delivery\" for the delivery route of the delivery driver, the delivery driver loads the trolley cage into their vehicle using Mobile Scanner running Transport Management System. Delivery Driver loads trolleys storing consolidated parcels to vehicle for either linehaul to another logyCorp terminal or the last mile delivery to service point using Mobile Scanner running Transport Management System. Loading a consolidated unit to a vehicle records the \"loaded to delivery\" event to each parcel consolidated. '. Load route trolley cage into vehicle and start delivery route is also involved in connections: It TriggeringRelationship the Shelve parcels into parcel locker (BusinessProcess). It is AssignmentRelationship by the Delivery Driver (BusinessActor). It is ServingRelationship by the Mobile Scanner (Equipment). It is TriggeringRelationship by the Consignment ready for delivery (ApplicationEvent)."
+    },
+    {
+        "id": "fact-element-id-462411beb55d44168d2540fcd260c1c0",
+        "type": "element-relation_description",
+        "text": "The Load trolley cage into vehicle (BusinessProcess) is described as: 'Delivery driver scans the consolidated trolley cage of parcels with Transport Management System run in Mobile Scanner as loaded to vehicle. '. Load trolley cage into vehicle is also involved in connections: It TriggeringRelationship the Unload trolley cage's parcels into sorter (BusinessProcess). It is AssignmentRelationship by the Delivery Driver (BusinessActor). It is ServingRelationship by the Mobile Scanner (Equipment). It is TriggeringRelationship by the Create transport stop (ApplicationProcess)."
+    },
+    {
+        "id": "fact-element-id-0fe1c0173a244e9fbc141714230ad1cb",
+        "type": "element-relation_description",
+        "text": "The Shelve parcels into parcel locker (BusinessProcess) is described as: 'Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner. Parcel locker door is opened via an admin code known by delivery drivers. The delivery driver scans each parcel shelved into a parcel locker with the Mobile Scanner running Transport Management System to log \"At service point\" status to the parcel. Transport Management System stores the status in logyCorp ERP consignment event log.'. Shelve parcels into parcel locker is also involved in connections: It TriggeringRelationship the Consignment at service point (ApplicationEvent). It is AssignmentRelationship by the Delivery Driver (BusinessActor). It is ServingRelationship by the Mobile Scanner (Equipment). It is ServingRelationship by the Parcel Locker (Equipment). It is TriggeringRelationship by the Load route trolley cage into vehicle and start delivery route (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-9fd60d83ac5d4034a9c2a28d750adfb6",
+        "type": "element-relation_description",
+        "text": "The Unload trolley cage's parcels into sorter (BusinessProcess) is described as: 'When the delivery driver delivers a trolley cage to logyCorp terminal, logyCorp's warehouse staff unload the trolley cage's parcels into the terminal's sorter.'. Unload trolley cage's parcels into sorter is also involved in connections: It TriggeringRelationship the Consignment fetched from warehouse (ApplicationEvent). It TriggeringRelationship the Consignment measured (ApplicationEvent). It TriggeringRelationship the Consignment sorted (ApplicationEvent). It is AssignmentRelationship by the Warehouse Staff (BusinessActor). It is ServingRelationship by the Sorter (Equipment). It is TriggeringRelationship by the Load trolley cage into vehicle (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-36aef7017bb54a75b437d5d000f41bfb",
+        "type": "element-relation_description",
+        "text": "The eCom platform (ApplicationComponent) is described as: 'eCom platforms (external Application Components are usually Shopify or WooCommerce. Larger eCom businesses usually create their own eCom platform, often heavily dependent on their ERP system. Smaller eCom businesses start with just eCom platforms and do custom business processess (like making a transport order to logyCorp) manually.'. eCom platform is also involved in connections: It FlowRelationship the eCom's ERP (ApplicationComponent). It ServingRelationship the Buy product delivered from eCom (BusinessProcess). It is ServingRelationship by the Service Point API (ApplicationInterface)."
+    },
+    {
+        "id": "fact-element-id-cf26ff3812194954ac8d3d8259be3383",
+        "type": "element-relation_description",
+        "text": "The eCom's ERP (ApplicationComponent) is described as: 'eCom's ERP (Application Component) is often a Warehouse Management System (WMS) that maintains the eCom's warehouse stock of products. Larger eCom's usually treat the eCom platform as an I/O slave to their WMS. Smaller eCom's usually use their eCom platform as WMS (e.g., to store warehouse stock). '. eCom's ERP is also involved in connections: It FlowRelationship the Orders API (ApplicationInterface). It ServingRelationship the Create transport order (ApplicationProcess). It is FlowRelationship by the eCom platform (ApplicationComponent)."
+    },
+    {
+        "id": "fact-element-id-e658c32b647d45c6b256bc71ec0a3692",
+        "type": "element-relation_description",
+        "text": "The logyCorp ERP (ApplicationComponent) is described as: 'logyCorp ERP (Application Component) is a Java Monolith with a monolithic relational database. Using a three-layer architecture (Interface, Business Logic, Database), the ERP takes input from several systems (e.g., Transport Management System) and interfaces (Service Point API, Orders API, Notifications API), processess them with its business logic, and then stores in the database. This ensures that the master state is in the ERP's database, that the master business logic is the ERP's, and all systems recording consignment status events (e.g., Transport Management System, Orders API, Sorter, Mobile Scanner, Parcel Locker, etc.) will be centralised in the logyCorp ERP. These systems will also not have their own state of consignments, acting as I/O slaves of the ERP. logyCorp is hosted on AWS EC2-instances, load balanced with AWS ELB.'. logyCorp ERP is also involved in connections: It FlowRelationship the Sorter (Equipment). It FlowRelationship the Transport Management System (ApplicationComponent). It ServingRelationship the Notifications API (ApplicationInterface). It ServingRelationship the Orders API (ApplicationInterface). It ServingRelationship the Service Point API (ApplicationInterface). It is FlowRelationship by the Mobile Scanner (Equipment). It is FlowRelationship by the Orders API (ApplicationInterface). It is FlowRelationship by the Parcel Locker (Equipment). It is FlowRelationship by the Sorter (Equipment). It is FlowRelationship by the Transport Management System (ApplicationComponent)."
+    },
+    {
+        "id": "fact-element-id-801c6ffcd7b945e98574f4b4bfbcaee7",
+        "type": "element-relation_description",
+        "text": "The SMS Gateway service (ApplicationComponent) is described as: 'SMS Gateway service (Application Component) is a SaaS-service for sending SMS messages, used by Notifications API. SMS Gateway only sends, does not receive, SMS messages.'. SMS Gateway service is also involved in connections: It ServingRelationship the Notify of fetchable parcel and fetch code (ApplicationProcess). It is FlowRelationship by the Notifications API (ApplicationInterface)."
+    },
+    {
+        "id": "fact-element-id-4eece93cdf324044a7a1a67e06532b40",
+        "type": "element-relation_description",
+        "text": "The Transport Management System (ApplicationComponent) is described as: 'Transport Management System (Application Component) is a separate system from logyCorp ERP but all consignment data is stored solely in logyCorp ERP and fetched from there. Transport Management System creates routes, their stops, and stores delivery driver events logged from Mobile Scanners.'. Transport Management System is also involved in connections: It FlowRelationship the logyCorp ERP (ApplicationComponent). It ServingRelationship the Create transport stop (ApplicationProcess). It is FlowRelationship by the logyCorp ERP (ApplicationComponent). It is FlowRelationship by the Mobile Scanner (Equipment)."
+    },
+    {
+        "id": "fact-element-id-3e250ffd4ada4efcaab40e5bdcb1a1d5",
+        "type": "element-relation_description",
+        "text": "The Consignment at service point (ApplicationEvent) is described as: '\"At service point\" status will be added as the newest event in the consignment event log.'. Consignment at service point is also involved in connections: It TriggeringRelationship the Notify of fetchable parcel and fetch code (ApplicationProcess). It is TriggeringRelationship by the Shelve parcels into parcel locker (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-8a0fdfcb56ba4541b80c0306002bd0e2",
+        "type": "element-relation_description",
+        "text": "The Consignment consolidated (ApplicationEvent) is described as: '\"Consolidated\" status and one-to-many foreign key with the consolidation id of the delivery trolley cage, stored in logyCorp ERP, will be added as the newest event in the consignment event log.'. Consignment consolidated is also involved in connections: It is TriggeringRelationship by the Load parcel from chute to route trolley cage (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-d1b1aa026fc34723bdf53e28b4ca9e49",
+        "type": "element-relation_description",
+        "text": "The Consignment created (ApplicationEvent) is described as: '\"Created\" status will be added as the newest event in the consignment event log.'. Consignment created is also involved in connections: It TriggeringRelationship the Create transport stop (ApplicationProcess). It is TriggeringRelationship by the Create consignment (ApplicationProcess)."
+    },
+    {
+        "id": "fact-element-id-a3f02044446a4ac2907c0c4a2a548386",
+        "type": "element-relation_description",
+        "text": "The Consignment fetch notified (ApplicationEvent) is described as: '\"Fetch notified\" status will be added as the newest event in the consignment event log.'. Consignment fetch notified is also involved in connections: It TriggeringRelationship the Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess). It is TriggeringRelationship by the Notify of fetchable parcel and fetch code (ApplicationProcess)."
+    },
+    {
+        "id": "fact-element-id-50985de30af64e1bbb87a0ac47e84920",
+        "type": "element-relation_description",
+        "text": "The Consignment fetched by consumer (ApplicationEvent) is described as: '\"Fetched by consumer\" status will be added as the newest event in the consignment event log.'. Consignment fetched by consumer is also involved in connections: It is TriggeringRelationship by the Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-0f25c14fce9947d6a7a140fa6abd6426",
+        "type": "element-relation_description",
+        "text": "The Consignment fetched from warehouse (ApplicationEvent) is described as: '\"Fetched from warehouse\" status will be added retroactively once the parcel is scanned by sorter as the newest event in the consignment event log.'. Consignment fetched from warehouse is also involved in connections: It is TriggeringRelationship by the Unload trolley cage's parcels into sorter (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-9175f39a0eae480e8838c1e639807d8d",
+        "type": "element-relation_description",
+        "text": "The Consignment measured (ApplicationEvent) is described as: '\"Measured\" status and measures will be added as the newest event in the consignment event log. '. Consignment measured is also involved in connections: It is TriggeringRelationship by the Unload trolley cage's parcels into sorter (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-c546c9bb32894e889312b8a99e5c6a59",
+        "type": "element-relation_description",
+        "text": "The Consignment ready for delivery (ApplicationEvent) is described as: '\"Ready for delivery\" status will be added as the newest event in the consignment event log.'. Consignment ready for delivery is also involved in connections: It TriggeringRelationship the Load route trolley cage into vehicle and start delivery route (BusinessProcess). It is TriggeringRelationship by the Load parcel from chute to route trolley cage (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-ec78c4ba48624cd2aede15a70189bfdd",
+        "type": "element-relation_description",
+        "text": "The Consignment sorted (ApplicationEvent) is described as: '\"Sorted\" status will be added as the newest event in the consignment event log. '. Consignment sorted is also involved in connections: It TriggeringRelationship the Load parcel from chute to route trolley cage (BusinessProcess). It is TriggeringRelationship by the Unload trolley cage's parcels into sorter (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-420056dfa61e4e0fbe3a3299d173f2b5",
+        "type": "element-relation_description",
+        "text": "The Notifications API (ApplicationInterface) is described as: 'Notifications API (Application Interface) handles SMS Gateways, emails, and alerts in partner systems for logyCorp ERP. Notifications API is a REST API of logyCorp ERP. logyCorp ERP sends, for example, fetch code and notification SMS to consumer via Notifications API through using SMS Gateway service. Notifications API only sends, does not receive, messages.'. Notifications API is also involved in connections: It FlowRelationship the SMS Gateway service (ApplicationComponent). It is ServingRelationship by the logyCorp ERP (ApplicationComponent)."
+    },
+    {
+        "id": "fact-element-id-87ec15d8a64546289876d6600eafd035",
+        "type": "element-relation_description",
+        "text": "The Orders API (ApplicationInterface) is described as: 'Orders API (Application Interface) collect consignment orders from either eComs or logyCorp's internal services. Orders API is a REST API that serves the logyCorp ERP with an CRUD operation to an order. Creating an order will make a new consignment in the logyCorp ERP. Reading an order will return its status events. Updating an order will update the service point, consumer information, eCom information, delivery product, or deactivate the delivery. Deleting an order will delete the record of the order. Consignment events are recorded via point-to-point APIs beween logyCorp ERP and systems.'. Orders API is also involved in connections: It FlowRelationship the logyCorp ERP (ApplicationComponent). It ServingRelationship the Create consignment (ApplicationProcess). It is FlowRelationship by the eCom's ERP (ApplicationComponent). It is ServingRelationship by the logyCorp ERP (ApplicationComponent)."
+    },
+    {
+        "id": "fact-element-id-e74ea56febfc46cd80d2d7e97215e19a",
+        "type": "element-relation_description",
+        "text": "The Service Point API (ApplicationInterface) is described as: 'Service Point API (Application Interface) serves the eCom platform service points closest to the selected address. Service Point API is a REST API of logyCorp ERP. The eCom platform often utilises the by showing taking the address as input on the website from the consumer and showing the output service points to the consumer in the website. The eCom platform will bind the consumer's selected service point as the location where the transport order will be delivered to.'. Service Point API is also involved in connections: It ServingRelationship the eCom platform (ApplicationComponent). It is ServingRelationship by the logyCorp ERP (ApplicationComponent)."
+    },
+    {
+        "id": "fact-element-id-fcfd5cd8de564744afc583ac2e33e63b",
+        "type": "element-relation_description",
+        "text": "The Create consignment (ApplicationProcess) is described as: 'Consignment is created by calling the Orders API. Orders API can be called by logyCorp's internal services or eComs. Creating a consignment sets consignment event to \"created\".'. Create consignment is also involved in connections: It TriggeringRelationship the Consignment created (ApplicationEvent). It is ServingRelationship by the Orders API (ApplicationInterface). It is TriggeringRelationship by the Create transport order (ApplicationProcess)."
+    },
+    {
+        "id": "fact-element-id-33c2a5cb773e480da81ac7fadc1772f4",
+        "type": "element-relation_description",
+        "text": "The Create transport order (ApplicationProcess) is described as: 'Transport order is the eCom's record of a product needing to be delivered; a promise to create a consignment with logyCorp - logyCorp does not know of the eCom's transport orders before they become consigments via the Orders API. Transport order compiles consumer service point and contact details needed for creating a consignment.'. Create transport order is also involved in connections: It TriggeringRelationship the Create consignment (ApplicationProcess). It is ServingRelationship by the eCom's ERP (ApplicationComponent). It is TriggeringRelationship by the Buy product delivered from eCom (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-6a9116fb62914b6f966fa40a3e7dcc58",
+        "type": "element-relation_description",
+        "text": "The Create transport stop (ApplicationProcess) is described as: 'Transport Management System creates a transport stop for the consignment triggered by the logyCorp ERP when a consignment is created.'. Create transport stop is also involved in connections: It TriggeringRelationship the Load trolley cage into vehicle (BusinessProcess). It is ServingRelationship by the Transport Management System (ApplicationComponent). It is TriggeringRelationship by the Consignment created (ApplicationEvent)."
+    },
+    {
+        "id": "fact-element-id-0c4a0f0066ec4502b5aab0549f4e61a6",
+        "type": "element-relation_description",
+        "text": "The Notify of fetchable parcel and fetch code (ApplicationProcess) is described as: 'When consignment is at \"At service point\" status, logyCorp ERP sends a notification and fetch code to the consumer via Notifications API using SMS Gateway service. When the Notifications API confirms a successful message delivery to logyCorp ERP, logyCorp ERP creates a \"Consignment fetch is notified\" event log.'. Notify of fetchable parcel and fetch code is also involved in connections: It TriggeringRelationship the Consignment fetch notified (ApplicationEvent). It is ServingRelationship by the SMS Gateway service (ApplicationComponent). It is TriggeringRelationship by the Consignment at service point (ApplicationEvent)."
+    },
+    {
+        "id": "fact-element-id-52e37c3f8a824a5d81176562bc165cb5",
+        "type": "element-relation_description",
+        "text": "The Mobile Scanner (Equipment) is described as: 'Mobile Scanners are MDM-managed Android phones running logyCorp ERP for warehouse staff and Transport Management System for delivery drivers.'. Mobile Scanner is also involved in connections: It FlowRelationship the logyCorp ERP (ApplicationComponent). It FlowRelationship the Transport Management System (ApplicationComponent). It ServingRelationship the Load parcel from chute to route trolley cage (BusinessProcess). It ServingRelationship the Load route trolley cage into vehicle and start delivery route (BusinessProcess). It ServingRelationship the Load trolley cage into vehicle (BusinessProcess). It ServingRelationship the Shelve parcels into parcel locker (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-2c9bcd560a6b448b810e2d5cc2a8a718",
+        "type": "element-relation_description",
+        "text": "The Parcel Locker (Equipment) is described as: 'Parcel Locker (Equipment) is a logyCorp service point type. logyCorp has parcel lockers and parcel stores as service points. Consignments are loaded to parcel lockers by delivery drivers and consignments are fetched from parcel lockers by consumers who have the consigments fetch code, generated and sent bt logyCorp ERP. '. Parcel Locker is also involved in connections: It FlowRelationship the logyCorp ERP (ApplicationComponent). It ServingRelationship the Fetch parcel from parcel locker stated using fetch code stated (BusinessProcess). It ServingRelationship the Shelve parcels into parcel locker (BusinessProcess)."
+    },
+    {
+        "id": "fact-element-id-9b9786d4714f4ef98e044cee5511e69c",
+        "type": "element-relation_description",
+        "text": "The Sorter (Equipment) is described as: 'Sorter (Equipment) is a terminal spanning conveyor belt with chutes. The input of the sorter stores a measure of parcel's dimensions (cubes) to logyCorp ERP  and scans it to read the parcel's delivery postcode from logyCorp ERP. logyCorp ERP maintains a postcode-chute reference table for each sorter that sorters query. The sorter pushes the parcel to the correct chute on the conveyor belt. From the chute warehouse staff read parcels with mobile scanners running logyCorp ERP to find the trolley cage the parcel should be consolidated to.'. Sorter is also involved in connections: It FlowRelationship the logyCorp ERP (ApplicationComponent). It ServingRelationship the Unload trolley cage's parcels into sorter (BusinessProcess). It is FlowRelationship by the logyCorp ERP (ApplicationComponent)."
+    }
+]

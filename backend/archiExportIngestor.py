@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 pd.set_option('display.max_columns', None)
 
@@ -86,6 +87,9 @@ for index, row in elements_df.iterrows():
         'text': fact_complex
     })
 
-print(f"\n--- Generated {len(facts)} Facts for Vector DB ---")
-for fact in facts:
-    print(f"ID: {fact['id']}\nText: {fact['text']}\nType: {fact['type']}\n---")
+try:
+    with open('facts.json', 'w', encoding='utf-8') as f:
+        json.dump(facts,f,ensure_ascii=False,indent=4)
+    print(f"Facts successfully saved")
+except IOError as e:
+    print(f"Error saving facts to JSON")
