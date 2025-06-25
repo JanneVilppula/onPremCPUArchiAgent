@@ -1,0 +1,1323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd" identifier="id-47e42b8c13044ca9987615bcd5cc3498">
+  <name xml:lang="en">archiAgent</name>
+  <elements>
+    <element identifier="id-e92b2520dd5b4bccb40049ee349c62ea" xsi:type="BusinessActor">
+      <name xml:lang="en">Consumer</name>
+      <documentation xml:lang="en">Consumers (Business Actor) are individuals that either buy product from eCom sites selecting logyCorp as delivery option, or send parcels to other individuals via logyCorp.</documentation>
+    </element>
+    <element identifier="id-bc94b46c98094148b0113a71c0b3e07c" xsi:type="BusinessProcess">
+      <name xml:lang="en">Buy product delivered from eCom</name>
+      <documentation xml:lang="en">When consumers select logyCorp as delivery provider in eCom webshop, they can select the service point they would want their parcel delivered to buy inputting their desired location. By buying the product from eCom with logyCorp as the selected delivery provider, the consumer instructs the eCom to use logyCorp for delivery. The eCom, not the consumer, is the customer of the parcel delivery from logyCorp. logyCorp deliveres the parcel to the consumer, not the eCom.</documentation>
+    </element>
+    <element identifier="id-462411beb55d44168d2540fcd260c1c0" xsi:type="BusinessProcess">
+      <name xml:lang="en">Load trolley cage into vehicle</name>
+      <documentation xml:lang="en">Delivery driver scans the consolidated trolley cage of parcels with Transport Management System run in Mobile Scanner as loaded to vehicle.</documentation>
+    </element>
+    <element identifier="id-9892256d0e214fd7a3b378015d7dd64a" xsi:type="BusinessActor">
+      <name xml:lang="en">Delivery Driver</name>
+      <documentation xml:lang="en">Delivery Driver (Business Actor) is a logyCorp employee that drives a van (first or last mile delivery) or lorry (linehaul between logyCorp terminals). Delivery Drivers use Mobile Scanners running Transport Management System.</documentation>
+    </element>
+    <element identifier="id-9fd60d83ac5d4034a9c2a28d750adfb6" xsi:type="BusinessProcess">
+      <name xml:lang="en">Unload trolley cage's parcels into sorter</name>
+      <documentation xml:lang="en">When the delivery driver delivers a trolley cage to logyCorp terminal, logyCorp's warehouse staff unload the trolley cage's parcels into the terminal's sorter.</documentation>
+    </element>
+    <element identifier="id-1b8b11f603984be38629423f6e69beb0" xsi:type="BusinessActor">
+      <name xml:lang="en">Warehouse Staff</name>
+      <documentation xml:lang="en">Warehouse Staff (Business Actor) is a logyCorp employee that handles parcels in terminals. Warehouse Staff use Mobile Scanners running logyCorp ERP.</documentation>
+    </element>
+    <element identifier="id-058b9cfab72d4efa9477f2b6b244975b" xsi:type="BusinessProcess">
+      <name xml:lang="en">Load parcel from chute to route trolley cage</name>
+      <documentation xml:lang="en">Warehouse Staff scan a parcel in the chute to find the trolley cage the parcel should be consolidated to. Warehouse Staff consolidate the parcel to a the designated trolley cage.</documentation>
+    </element>
+    <element identifier="id-e8da6e0724ac4565856642cabec2ed42" xsi:type="BusinessProcess">
+      <name xml:lang="en">Load route trolley cage into vehicle and start delivery route</name>
+      <documentation xml:lang="en">When delivery driver scans a trolley cage that returns consignment log with "Ready for delivery" for the delivery route of the delivery driver, the delivery driver loads the trolley cage into their vehicle using Mobile Scanner running Transport Management System. Delivery Driver loads trolleys storing consolidated parcels to vehicle for either linehaul to another logyCorp terminal or the last mile delivery to service point using Mobile Scanner running Transport Management System. Loading a consolidated unit to a vehicle records the "loaded to delivery" event to each parcel consolidated.</documentation>
+    </element>
+    <element identifier="id-0fe1c0173a244e9fbc141714230ad1cb" xsi:type="BusinessProcess">
+      <name xml:lang="en">Shelve parcels into parcel locker</name>
+      <documentation xml:lang="en">Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner. Parcel locker door is opened via an admin code known by delivery drivers. The delivery driver scans each parcel shelved into a parcel locker with the Mobile Scanner running Transport Management System to log "At service point" status to the parcel. Transport Management System stores the status in logyCorp ERP consignment event log.</documentation>
+    </element>
+    <element identifier="id-343d3f1769a04e3db6860336a19449ca" xsi:type="BusinessProcess">
+      <name xml:lang="en">Fetch parcel from parcel locker stated using fetch code stated</name>
+      <documentation xml:lang="en">When consumer receives a fetch notification and fetch code, the consumer knows to go fetch their parcel from the parcel locker using the given fetch code. When the consumer has fetched their parcel from the parcel locker a "Consignment fetched by consumer" event log is created, ending the delivery.</documentation>
+    </element>
+    <element identifier="id-36aef7017bb54a75b437d5d000f41bfb" xsi:type="ApplicationComponent">
+      <name xml:lang="en">eCom platform</name>
+      <documentation xml:lang="en">eCom platforms (external Application Components are usually Shopify or WooCommerce. Larger eCom businesses usually create their own eCom platform, often heavily dependent on their ERP system. Smaller eCom businesses start with just eCom platforms and do custom business processess (like making a transport order to logyCorp) manually.</documentation>
+    </element>
+    <element identifier="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="ApplicationComponent">
+      <name xml:lang="en">logyCorp ERP</name>
+      <documentation xml:lang="en">logyCorp ERP (Application Component) is a Java Monolith with a monolithic relational database. Using a three-layer architecture (Interface, Business Logic, Database), the ERP takes input from several systems (e.g., Transport Management System) and interfaces (Service Point API, Orders API, Notifications API), processess them with its business logic, and then stores in the database. This ensures that the master state is in the ERP's database, that the master business logic is the ERP's, and all systems recording consignment status events (e.g., Transport Management System, Orders API, Sorter, Mobile Scanner, Parcel Locker, etc.) will be centralised in the logyCorp ERP. These systems will also not have their own state of consignments, acting as I/O slaves of the ERP. logyCorp is hosted on AWS EC2-instances, load balanced with AWS ELB.</documentation>
+    </element>
+    <element identifier="id-e74ea56febfc46cd80d2d7e97215e19a" xsi:type="ApplicationInterface">
+      <name xml:lang="en">Service Point API</name>
+      <documentation xml:lang="en">Service Point API (Application Interface) serves the eCom platform service points closest to the selected address. Service Point API is a REST API of logyCorp ERP. The eCom platform often utilises the by showing taking the address as input on the website from the consumer and showing the output service points to the consumer in the website. The eCom platform will bind the consumer's selected service point as the location where the transport order will be delivered to.</documentation>
+    </element>
+    <element identifier="id-87ec15d8a64546289876d6600eafd035" xsi:type="ApplicationInterface">
+      <name xml:lang="en">Orders API</name>
+      <documentation xml:lang="en">Orders API (Application Interface) collect consignment orders from either eComs or logyCorp's internal services. Orders API is a REST API that serves the logyCorp ERP with an CRUD operation to an order. Creating an order will make a new consignment in the logyCorp ERP. Reading an order will return its status events. Updating an order will update the service point, consumer information, eCom information, delivery product, or deactivate the delivery. Deleting an order will delete the record of the order. Consignment events are recorded via point-to-point APIs beween logyCorp ERP and systems.</documentation>
+    </element>
+    <element identifier="id-cf26ff3812194954ac8d3d8259be3383" xsi:type="ApplicationComponent">
+      <name xml:lang="en">eCom's ERP</name>
+      <documentation xml:lang="en">eCom's ERP (Application Component) is often a Warehouse Management System (WMS) that maintains the eCom's warehouse stock of products. Larger eCom's usually treat the eCom platform as an I/O slave to their WMS. Smaller eCom's usually use their eCom platform as WMS (e.g., to store warehouse stock).</documentation>
+    </element>
+    <element identifier="id-33c2a5cb773e480da81ac7fadc1772f4" xsi:type="ApplicationProcess">
+      <name xml:lang="en">Create transport order</name>
+      <documentation xml:lang="en">Transport order is the eCom's record of a product needing to be delivered; a promise to create a consignment with logyCorp - logyCorp does not know of the eCom's transport orders before they become consigments via the Orders API. Transport order compiles consumer service point and contact details needed for creating a consignment.</documentation>
+    </element>
+    <element identifier="id-fcfd5cd8de564744afc583ac2e33e63b" xsi:type="ApplicationProcess">
+      <name xml:lang="en">Create consignment</name>
+      <documentation xml:lang="en">Consignment is created by calling the Orders API. Orders API can be called by logyCorp's internal services or eComs. Creating a consignment sets consignment event to "created".</documentation>
+    </element>
+    <element identifier="id-6a9116fb62914b6f966fa40a3e7dcc58" xsi:type="ApplicationProcess">
+      <name xml:lang="en">Create transport stop</name>
+      <documentation xml:lang="en">Transport Management System creates a transport stop for the consignment triggered by the logyCorp ERP when a consignment is created.</documentation>
+    </element>
+    <element identifier="id-4eece93cdf324044a7a1a67e06532b40" xsi:type="ApplicationComponent">
+      <name xml:lang="en">Transport Management System</name>
+      <documentation xml:lang="en">Transport Management System (Application Component) is a separate system from logyCorp ERP but all consignment data is stored solely in logyCorp ERP and fetched from there. Transport Management System creates routes, their stops, and stores delivery driver events logged from Mobile Scanners.</documentation>
+    </element>
+    <element identifier="id-420056dfa61e4e0fbe3a3299d173f2b5" xsi:type="ApplicationInterface">
+      <name xml:lang="en">Notifications API</name>
+      <documentation xml:lang="en">Notifications API (Application Interface) handles SMS Gateways, emails, and alerts in partner systems for logyCorp ERP. Notifications API is a REST API of logyCorp ERP. logyCorp ERP sends, for example, fetch code and notification SMS to consumer via Notifications API through using SMS Gateway service. Notifications API only sends, does not receive, messages.</documentation>
+    </element>
+    <element identifier="id-0c4a0f0066ec4502b5aab0549f4e61a6" xsi:type="ApplicationProcess">
+      <name xml:lang="en">Notify of fetchable parcel and fetch code</name>
+      <documentation xml:lang="en">When consignment is at "At service point" status, logyCorp ERP sends a notification and fetch code to the consumer via Notifications API using SMS Gateway service. When the Notifications API confirms a successful message delivery to logyCorp ERP, logyCorp ERP creates a "Consignment fetch is notified" event log.</documentation>
+    </element>
+    <element identifier="id-801c6ffcd7b945e98574f4b4bfbcaee7" xsi:type="ApplicationComponent">
+      <name xml:lang="en">SMS Gateway service</name>
+      <documentation xml:lang="en">SMS Gateway service (Application Component) is a SaaS-service for sending SMS messages, used by Notifications API. SMS Gateway only sends, does not receive, SMS messages.</documentation>
+    </element>
+    <element identifier="id-d1b1aa026fc34723bdf53e28b4ca9e49" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment created</name>
+      <documentation xml:lang="en">"Created" status will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-0f25c14fce9947d6a7a140fa6abd6426" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment fetched from warehouse</name>
+      <documentation xml:lang="en">"Fetched from warehouse" status will be added retroactively once the parcel is scanned by sorter as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-ec78c4ba48624cd2aede15a70189bfdd" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment sorted</name>
+      <documentation xml:lang="en">"Sorted" status will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-c546c9bb32894e889312b8a99e5c6a59" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment ready for delivery</name>
+      <documentation xml:lang="en">"Ready for delivery" status will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-3e250ffd4ada4efcaab40e5bdcb1a1d5" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment at service point</name>
+      <documentation xml:lang="en">"At service point" status will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-a3f02044446a4ac2907c0c4a2a548386" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment fetch notified</name>
+      <documentation xml:lang="en">"Fetch notified" status will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-50985de30af64e1bbb87a0ac47e84920" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment fetched by consumer</name>
+      <documentation xml:lang="en">"Fetched by consumer" status will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-9175f39a0eae480e8838c1e639807d8d" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment measured</name>
+      <documentation xml:lang="en">"Measured" status and measures will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-8a0fdfcb56ba4541b80c0306002bd0e2" xsi:type="ApplicationEvent">
+      <name xml:lang="en">Consignment consolidated</name>
+      <documentation xml:lang="en">"Consolidated" status and one-to-many foreign key with the consolidation id of the delivery trolley cage, stored in logyCorp ERP, will be added as the newest event in the consignment event log.</documentation>
+    </element>
+    <element identifier="id-9b9786d4714f4ef98e044cee5511e69c" xsi:type="Equipment">
+      <name xml:lang="en">Sorter</name>
+      <documentation xml:lang="en">Sorter (Equipment) is a terminal spanning conveyor belt with chutes. The input of the sorter stores a measure of parcel's dimensions (cubes) to logyCorp ERP  and scans it to read the parcel's delivery postcode from logyCorp ERP. logyCorp ERP maintains a postcode-chute reference table for each sorter that sorters query. The sorter pushes the parcel to the correct chute on the conveyor belt. From the chute warehouse staff read parcels with mobile scanners running logyCorp ERP to find the trolley cage the parcel should be consolidated to.</documentation>
+    </element>
+    <element identifier="id-52e37c3f8a824a5d81176562bc165cb5" xsi:type="Equipment">
+      <name xml:lang="en">Mobile Scanner</name>
+      <documentation xml:lang="en">Mobile Scanners are MDM-managed Android phones running logyCorp ERP for warehouse staff and Transport Management System for delivery drivers.</documentation>
+    </element>
+    <element identifier="id-2c9bcd560a6b448b810e2d5cc2a8a718" xsi:type="Equipment">
+      <name xml:lang="en">Parcel Locker</name>
+      <documentation xml:lang="en">Parcel Locker (Equipment) is a logyCorp service point type. logyCorp has parcel lockers and parcel stores as service points. Consignments are loaded to parcel lockers by delivery drivers and consignments are fetched from parcel lockers by consumers who have the consigments fetch code, generated and sent bt logyCorp ERP.</documentation>
+    </element>
+  </elements>
+  <relationships>
+    <relationship identifier="id-78098fe6ebdd4742a7b36876bdcc7c30" source="id-e74ea56febfc46cd80d2d7e97215e19a" target="id-36aef7017bb54a75b437d5d000f41bfb" xsi:type="Serving">
+      <name xml:lang="en">Service Point API - eCom platform</name>
+      <documentation xml:lang="en">eCom platform calls Service Point API to show consumers the service points closest to them to select for delivery location</documentation>
+    </relationship>
+    <relationship identifier="id-c52dc215c9934d298ffc3a9301b8143a" source="id-36aef7017bb54a75b437d5d000f41bfb" target="id-bc94b46c98094148b0113a71c0b3e07c" xsi:type="Serving">
+      <name xml:lang="en">eCom platform - Buy product delivered from eCom</name>
+      <documentation xml:lang="en">eCom platform is the website where consumer buys products</documentation>
+    </relationship>
+    <relationship identifier="id-71f3879900434b9cba609611cf4f2334" source="id-e92b2520dd5b4bccb40049ee349c62ea" target="id-bc94b46c98094148b0113a71c0b3e07c" xsi:type="Assignment">
+      <name xml:lang="en">Consumer - Buy product delivered from eCom</name>
+      <documentation xml:lang="en">Consumer buys a product from eCom</documentation>
+    </relationship>
+    <relationship identifier="id-fffb8d74a3504b1ab4c0c35816badff1" source="id-36aef7017bb54a75b437d5d000f41bfb" target="id-cf26ff3812194954ac8d3d8259be3383" xsi:type="Flow">
+      <name xml:lang="en">eCom platform - eCom's ERP</name>
+      <documentation xml:lang="en">if eCom has ERP, that ERP makes the order to logyCorp's Order API from the information the consumer selected in the eCom platform GUI</documentation>
+    </relationship>
+    <relationship identifier="id-4fecd9df10db490396b103ffdb0d8ac5" source="id-e658c32b647d45c6b256bc71ec0a3692" target="id-87ec15d8a64546289876d6600eafd035" xsi:type="Serving">
+      <name xml:lang="en">logyCorp ERP - Orders API</name>
+      <documentation xml:lang="en">logyCorp ERP stores all consignments and products and hosts Orders API</documentation>
+    </relationship>
+    <relationship identifier="id-f6f205bd59d0490f850ebba1a808beaa" source="id-e658c32b647d45c6b256bc71ec0a3692" target="id-e74ea56febfc46cd80d2d7e97215e19a" xsi:type="Serving">
+      <name xml:lang="en">logyCorp ERP - Service Point API</name>
+      <documentation xml:lang="en">logyCorp stores all service points and hosts Service Point API</documentation>
+    </relationship>
+    <relationship identifier="id-3ba4a50cf271473cba005087658825e0" source="id-bc94b46c98094148b0113a71c0b3e07c" target="id-33c2a5cb773e480da81ac7fadc1772f4" xsi:type="Triggering">
+      <name xml:lang="en">Buy product delivered from eCom - Create transport order</name>
+      <documentation xml:lang="en">When a consumer buys a product in a eCom site, the eCom promises to deliver the product to consumer</documentation>
+    </relationship>
+    <relationship identifier="id-3d6f6ce143b64d56b3d393dec1628ddc" source="id-cf26ff3812194954ac8d3d8259be3383" target="id-33c2a5cb773e480da81ac7fadc1772f4" xsi:type="Serving">
+      <name xml:lang="en">eCom's transport orders to logyCorp are stored in eCom's ERP</name>
+      <documentation xml:lang="en">eCom's transport orders to logyCorp are stored in eCom's ERP</documentation>
+    </relationship>
+    <relationship identifier="id-4587c0c99a2c4fe8be822e3885ab2cc0" source="id-33c2a5cb773e480da81ac7fadc1772f4" target="id-fcfd5cd8de564744afc583ac2e33e63b" xsi:type="Triggering">
+      <name xml:lang="en">Create transport order - Create consignment</name>
+      <documentation xml:lang="en">Transport orders are realised for logyCorp by a created consignment via Orders API</documentation>
+    </relationship>
+    <relationship identifier="id-91700e0d23c84ddaa74a0c35dcc0802c" source="id-87ec15d8a64546289876d6600eafd035" target="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="Flow">
+      <name xml:lang="en">Orders API - logyCorp ERP</name>
+      <documentation xml:lang="en">When Orders API receives a call, it relays it t logyCorp ERP to create a consignment</documentation>
+    </relationship>
+    <relationship identifier="id-69c9f67aa3ab41f1a8756b9b6b6a25d1" source="id-87ec15d8a64546289876d6600eafd035" target="id-fcfd5cd8de564744afc583ac2e33e63b" xsi:type="Serving">
+      <name xml:lang="en">Orders API - Create consignment</name>
+      <documentation xml:lang="en">Orders API is the interface from where a consignment is created</documentation>
+    </relationship>
+    <relationship identifier="id-59c6aeb8d5714e849506dcaad08d0d21" source="id-cf26ff3812194954ac8d3d8259be3383" target="id-87ec15d8a64546289876d6600eafd035" xsi:type="Flow">
+      <name xml:lang="en">eCom's ERP - Orders API</name>
+      <documentation xml:lang="en">eCom's ERP automatically populates the Orders API call - the eCom can either automatically trigger or manually approve these Orders API calls</documentation>
+    </relationship>
+    <relationship identifier="id-294be643a38b4cd09feae8f4614349a4" source="id-4eece93cdf324044a7a1a67e06532b40" target="id-6a9116fb62914b6f966fa40a3e7dcc58" xsi:type="Serving">
+      <name xml:lang="en">Transport Management System - Create transport stop</name>
+      <documentation xml:lang="en">A stop is created by Transport Management System automatically</documentation>
+    </relationship>
+    <relationship identifier="id-d16d3c3da30746bba6818ec3ac9067db" source="id-e658c32b647d45c6b256bc71ec0a3692" target="id-4eece93cdf324044a7a1a67e06532b40" xsi:type="Flow">
+      <name xml:lang="en">logyCorp ERP - Transport Management System</name>
+      <documentation xml:lang="en">logyCorp ERP is the master for consignment info and relays it to Transport Management System</documentation>
+    </relationship>
+    <relationship identifier="id-3c2772b115fd4d1f8dc4ad960a49db14" source="id-9892256d0e214fd7a3b378015d7dd64a" target="id-462411beb55d44168d2540fcd260c1c0" xsi:type="Assignment">
+      <name xml:lang="en">Delivery Driver - Load trolley cage into vehicle</name>
+      <documentation xml:lang="en">Delivery Driver loads trolley cage from eCom's warehouse to delivery van using Mobile Scanner running Transport Management System</documentation>
+    </relationship>
+    <relationship identifier="id-5ceedd412db6426e847aa7e5bc7cdfa1" source="id-6a9116fb62914b6f966fa40a3e7dcc58" target="id-462411beb55d44168d2540fcd260c1c0" xsi:type="Triggering">
+      <name xml:lang="en">Create transport stop - Load trolley cage into vehicle</name>
+      <documentation xml:lang="en">When a delivery driver drives a Transport Management System created route consisting of stops, one of those stops will be a the consignment</documentation>
+    </relationship>
+    <relationship identifier="id-eabee61dd7fc48059456c898c29af38a" source="id-1b8b11f603984be38629423f6e69beb0" target="id-9fd60d83ac5d4034a9c2a28d750adfb6" xsi:type="Assignment">
+      <name xml:lang="en">Warehouse Staff - Unload trolley cage's parcels into sorter</name>
+      <documentation xml:lang="en">Warehouse Staff unload the delivery van's trolley cage's from eCom warehouses and unload their parcels into the sorter that scans and measures them</documentation>
+    </relationship>
+    <relationship identifier="id-593696bfe0ad4bc88903167a6e4811e7" source="id-462411beb55d44168d2540fcd260c1c0" target="id-9fd60d83ac5d4034a9c2a28d750adfb6" xsi:type="Triggering">
+      <name xml:lang="en">Load trolley cage into vehicle - Unload trolley cage's parcels into sorter</name>
+      <documentation xml:lang="en">Every delivery route starts and terminates at the logyCorp terminal, so the fetched parcel will arrive at logyCorp terminal as terminus where it will be unloaded to a sorter</documentation>
+    </relationship>
+    <relationship identifier="id-2628b493f7fa428f8cf237190b81d0cd" source="id-1b8b11f603984be38629423f6e69beb0" target="id-058b9cfab72d4efa9477f2b6b244975b" xsi:type="Assignment">
+      <name xml:lang="en">Warehouse Staff - Load parcel from chute to route trolley cage</name>
+      <documentation xml:lang="en">Warehouse Staff scan a parcel in the chute to find the trolley cage the parcel should be consolidated to. Warehouse Staff consolidate the parcel to a the designated trolley cage.</documentation>
+    </relationship>
+    <relationship identifier="id-1634d106a0744977a7b62d1182d84240" source="id-9b9786d4714f4ef98e044cee5511e69c" target="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="Flow">
+      <name xml:lang="en">Sorter - logyCorp ERP</name>
+      <documentation xml:lang="en">The sorter stores the parcel's measure and sorting status to logyCorp ERP consignment event log</documentation>
+    </relationship>
+    <relationship identifier="id-ab4d1b9f956d4719b77736bb3ecc713c" source="id-9b9786d4714f4ef98e044cee5511e69c" target="id-9fd60d83ac5d4034a9c2a28d750adfb6" xsi:type="Serving">
+      <name xml:lang="en">Sorter - Unload trolley cage's parcels into sorter</name>
+      <documentation xml:lang="en">Sorter measures and scans the parcel. Measures and sorting are stored in logyCorp ERP consignment event log</documentation>
+    </relationship>
+    <relationship identifier="id-a39a13c36a724d418ad478d53824064e" source="id-52e37c3f8a824a5d81176562bc165cb5" target="id-058b9cfab72d4efa9477f2b6b244975b" xsi:type="Serving">
+      <name xml:lang="en">Mobile Scanner - Load parcel from chute to route trolley cage</name>
+      <documentation xml:lang="en">Warehouse staff scan parcels in chute and consolidate to route trolley cage using Mobile Scanner running logyCorp ERP</documentation>
+    </relationship>
+    <relationship identifier="id-6b1823b283334a3a926ca75da7053f50" source="id-52e37c3f8a824a5d81176562bc165cb5" target="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="Flow">
+      <name xml:lang="en">Mobile Scanner - logyCorp ERP</name>
+      <documentation xml:lang="en">When Mobile Scanner is running logyCorp ERP all events with Mobile Scanner are passed to logyCorp ERP</documentation>
+    </relationship>
+    <relationship identifier="id-1e78b88a660142998d40ec2855098d33" source="id-52e37c3f8a824a5d81176562bc165cb5" target="id-462411beb55d44168d2540fcd260c1c0" xsi:type="Serving">
+      <name xml:lang="en">Mobile Scanner - Load trolley cage into vehicle</name>
+      <documentation xml:lang="en">Delivery Driver is using Mobile Scanner running Transport Management System to load trolley cage into vehicle</documentation>
+    </relationship>
+    <relationship identifier="id-d44052f5918c41acb1a9a5bedb2966bb" source="id-52e37c3f8a824a5d81176562bc165cb5" target="id-4eece93cdf324044a7a1a67e06532b40" xsi:type="Flow">
+      <name xml:lang="en">Mobile Scanner - Transport Management System</name>
+      <documentation xml:lang="en">When Mobile Scanner is running Transport Management System all events with Mobile Scanner are passed to Transport Management System</documentation>
+    </relationship>
+    <relationship identifier="id-c04b91e7530e48e9be56060c64eef853" source="id-52e37c3f8a824a5d81176562bc165cb5" target="id-e8da6e0724ac4565856642cabec2ed42" xsi:type="Serving">
+      <name xml:lang="en">Mobile Scanner - Load route trolley cage into vehicle and start delivery route</name>
+      <documentation xml:lang="en">Delivery Driver is using Mobile Scanner running Transport Management System to load trolley cage into vehicle. Once all trolley cages are loaded to vehicle, marks delivery route drive to have started on delivery driver starts driving delivery route on Mobile Scanner running Transport Management System</documentation>
+    </relationship>
+    <relationship identifier="id-457cb0a7a8cb4d8ab3da941933269254" source="id-9892256d0e214fd7a3b378015d7dd64a" target="id-e8da6e0724ac4565856642cabec2ed42" xsi:type="Assignment">
+      <name xml:lang="en">Delivery Driver - Load route trolley cage into vehicle and start delivery route</name>
+      <documentation xml:lang="en">Delivery Driver uses Mobile Scanner running Transportation Management System to scan whether the route delivery trolley cage next to their loading bay is for their delivery route. If yes, Delivery Driver uses Mobile Scanner running Transportation Management System to load trolley cage into vehicle. Once all trolley cages are loaded to vehicle, marks delivery route drive to have started on delivery driver starts driving delivery route on Mobile Scanner running Transport Management System</documentation>
+    </relationship>
+    <relationship identifier="id-504a53a2a1854a87bc291e007b809a1a" source="id-52e37c3f8a824a5d81176562bc165cb5" target="id-0fe1c0173a244e9fbc141714230ad1cb" xsi:type="Serving">
+      <name xml:lang="en">Mobile Scanner - Shelve parcels into parcel locker</name>
+      <documentation xml:lang="en">Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner</documentation>
+    </relationship>
+    <relationship identifier="id-5bc1f1144ce64207b04a9017e1e19eb7" source="id-4eece93cdf324044a7a1a67e06532b40" target="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="Flow">
+      <name xml:lang="en">Transport Management System - logyCorp ERP</name>
+    </relationship>
+    <relationship identifier="id-36de0bef01294b99980ef9fb2e3159ad" source="id-e8da6e0724ac4565856642cabec2ed42" target="id-0fe1c0173a244e9fbc141714230ad1cb" xsi:type="Triggering">
+      <name xml:lang="en">Load route trolley cage into vehicle and start delivery route - Shelve parcels into parcel locker</name>
+      <documentation xml:lang="en">Once delivery route is at consignment's transport stop, Mobile Scanner running Transport Management System tells delivery driver which trolley cages is to be shelved into the stop's parcel locker</documentation>
+    </relationship>
+    <relationship identifier="id-64cba11f5ba94a509bf6ecd1104cb481" source="id-9892256d0e214fd7a3b378015d7dd64a" target="id-0fe1c0173a244e9fbc141714230ad1cb" xsi:type="Assignment">
+      <name xml:lang="en">Delivery Driver - Shelve parcels into parcel locker</name>
+      <documentation xml:lang="en">Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner</documentation>
+    </relationship>
+    <relationship identifier="id-d22f3c859a65438f91c7183678563e37" source="id-e658c32b647d45c6b256bc71ec0a3692" target="id-420056dfa61e4e0fbe3a3299d173f2b5" xsi:type="Serving">
+      <name xml:lang="en">logyCorp ERP - Notifications API</name>
+      <documentation xml:lang="en">Notifications API is a REST API hosted by logyCorp ERP</documentation>
+    </relationship>
+    <relationship identifier="id-cfe1e466d4b045a3ae12788a0f8cb912" source="id-420056dfa61e4e0fbe3a3299d173f2b5" target="id-801c6ffcd7b945e98574f4b4bfbcaee7" xsi:type="Flow">
+      <name xml:lang="en">Notifications API - SMS Gateway service</name>
+      <documentation xml:lang="en">Notifications API (Application Interface) handles SMS Gateway service for logyCorp ERP</documentation>
+    </relationship>
+    <relationship identifier="id-ef32f6cb267f4ca1828b4bbd7ad865d0" source="id-801c6ffcd7b945e98574f4b4bfbcaee7" target="id-0c4a0f0066ec4502b5aab0549f4e61a6" xsi:type="Serving">
+      <name xml:lang="en">SMS Gateway service - Notify of fetchable parcel and fetch code</name>
+      <documentation xml:lang="en">SMS Gateway service notifies of fetchable parcel and fetch code</documentation>
+    </relationship>
+    <relationship identifier="id-44e68744fb6a4459a41de3fba9bd80f8" source="id-e92b2520dd5b4bccb40049ee349c62ea" target="id-343d3f1769a04e3db6860336a19449ca" xsi:type="Assignment">
+      <name xml:lang="en">Consumer - Fetch parcel from parcel locker stated using fetch code stated</name>
+      <documentation xml:lang="en">Consumer fetches parcel from parcel locker using fetch code</documentation>
+    </relationship>
+    <relationship identifier="id-7bbae28cf11b4f52a68c5cdd1d5cd5d0" source="id-2c9bcd560a6b448b810e2d5cc2a8a718" target="id-0fe1c0173a244e9fbc141714230ad1cb" xsi:type="Serving">
+      <name xml:lang="en">Parcel Locker - Shelve parcels into parcel locker</name>
+      <documentation xml:lang="en">Delivery Driver loads parcels into parcel lockers using Transport Management System running on Mobile Scanner</documentation>
+    </relationship>
+    <relationship identifier="id-cc209a118a2b4464b644fdbd30fe0bb7" source="id-2c9bcd560a6b448b810e2d5cc2a8a718" target="id-343d3f1769a04e3db6860336a19449ca" xsi:type="Serving">
+      <name xml:lang="en">Parcel Locker - Fetch parcel from parcel locker stated using fetch code stated</name>
+      <documentation xml:lang="en">The consumer uses the parcel locker's screen to input their fetch code that opens the parcel locker door where their parcel is shelved</documentation>
+    </relationship>
+    <relationship identifier="id-3634d23fac3c4a1bb377f41823a1c4a6" source="id-2c9bcd560a6b448b810e2d5cc2a8a718" target="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="Flow">
+      <name xml:lang="en">Parcel Locker - logyCorp ERP</name>
+      <documentation xml:lang="en">Parcel locker updated logyCorp ERP when users have opened parcel locker doors to remove or add parcels</documentation>
+    </relationship>
+    <relationship identifier="id-74c00b62c80b4c409757a5d2cd3fc3bd" source="id-fcfd5cd8de564744afc583ac2e33e63b" target="id-d1b1aa026fc34723bdf53e28b4ca9e49" xsi:type="Triggering">
+      <name xml:lang="en">Create consignment - Consignment created</name>
+      <documentation xml:lang="en">Creating a consignment stores a "Created" log event.</documentation>
+    </relationship>
+    <relationship identifier="id-b0657e64c591472c8e0ef854bbea067e" source="id-9fd60d83ac5d4034a9c2a28d750adfb6" target="id-0f25c14fce9947d6a7a140fa6abd6426" xsi:type="Triggering">
+      <name xml:lang="en">Unload trolley cage's parcels into sorter - Consignment fetched from warehouse</name>
+      <documentation xml:lang="en">Because what consignments the eCom warehouse's trolley cage contains aren't known to logyCorp ERP, only once parcels are unloaded into a sorter that scans them can "Fetched from warehouse" status be retroactively logged to the consignment.</documentation>
+    </relationship>
+    <relationship identifier="id-7d2f7ce9651c404486e8a5f1ac6e8162" source="id-9fd60d83ac5d4034a9c2a28d750adfb6" target="id-ec78c4ba48624cd2aede15a70189bfdd" xsi:type="Triggering">
+      <name xml:lang="en">Unload trolley cage's parcels into sorter - Consignment sorted</name>
+      <documentation xml:lang="en">The sorter stores "Sorted" status in logyCorp ERP consignment event log</documentation>
+    </relationship>
+    <relationship identifier="id-1ca191c7769f464aa20224a47d9fc883" source="id-058b9cfab72d4efa9477f2b6b244975b" target="id-c546c9bb32894e889312b8a99e5c6a59" xsi:type="Triggering">
+      <name xml:lang="en">Load parcel from chute to route trolley cage - Consignment ready for delivery</name>
+      <documentation xml:lang="en">When a parcel is loaded to the route trolley cage, the consignment event status log "Ready for delivery" is added</documentation>
+    </relationship>
+    <relationship identifier="id-c186c3ae42214d7494a10da63a03b124" source="id-0fe1c0173a244e9fbc141714230ad1cb" target="id-3e250ffd4ada4efcaab40e5bdcb1a1d5" xsi:type="Triggering">
+      <name xml:lang="en">Shelve parcels into parcel locker - Consignment at service point</name>
+      <documentation xml:lang="en">When delivery driver logs in Mobile Scanner running Transport Management Systems that a parcel is shelved into a parcel locker, logyCorp ERP creates consignment event log status "At service point"</documentation>
+    </relationship>
+    <relationship identifier="id-0e08a490d08a4e3299f1cb2ab354b7a5" source="id-0c4a0f0066ec4502b5aab0549f4e61a6" target="id-a3f02044446a4ac2907c0c4a2a548386" xsi:type="Triggering">
+      <name xml:lang="en">Notify of fetchable parcel and fetch code - Consignment fetch notified</name>
+      <documentation xml:lang="en">When a notification is sent, logyCorp ERP stores consignment event log as "fetch notified"</documentation>
+    </relationship>
+    <relationship identifier="id-22e33db589dd42f7a6184d5a4af2c8fc" source="id-343d3f1769a04e3db6860336a19449ca" target="id-50985de30af64e1bbb87a0ac47e84920" xsi:type="Triggering">
+      <name xml:lang="en">Fetch parcel from parcel locker stated using fetch code stated - Consignment fetched by consumer</name>
+      <documentation xml:lang="en">When the consumer has fetched their parcel from the parcel locker a "Consignment fetched by consumer" event log is created, ending the delivery.</documentation>
+    </relationship>
+    <relationship identifier="id-67b319e83acc4922ab4f545bf30e9f17" source="id-9fd60d83ac5d4034a9c2a28d750adfb6" target="id-9175f39a0eae480e8838c1e639807d8d" xsi:type="Triggering">
+      <name xml:lang="en">Unload trolley cage's parcels into sorter - Consignment measured</name>
+      <documentation xml:lang="en">The sorter stores "Measured" status and measures in logyCorp ERP consignment event log</documentation>
+    </relationship>
+    <relationship identifier="id-eec5fb6f8d29409a934e76352ef9f99a" source="id-058b9cfab72d4efa9477f2b6b244975b" target="id-8a0fdfcb56ba4541b80c0306002bd0e2" xsi:type="Triggering">
+      <name xml:lang="en">Load parcel from chute to route trolley cage - Consignment consolidated</name>
+    </relationship>
+    <relationship identifier="id-d0a01cceec524fffa8e696078d5f1e96" source="id-ec78c4ba48624cd2aede15a70189bfdd" target="id-058b9cfab72d4efa9477f2b6b244975b" xsi:type="Triggering">
+      <name xml:lang="en">Consignment sorted - Load parcel from chute to route trolley cage</name>
+      <documentation xml:lang="en">When consignment is at "sorted" status logyCorp ERP assigns trolley cage code to the parcel, which warehouse staff scan with mobile scanners running logyCorp ERP from the parcel</documentation>
+    </relationship>
+    <relationship identifier="id-abdbf23303ab447388d0be26f7793532" source="id-c546c9bb32894e889312b8a99e5c6a59" target="id-e8da6e0724ac4565856642cabec2ed42" xsi:type="Triggering">
+      <name xml:lang="en">Consignment ready for delivery - Load route trolley cage into vehicle and start delivery route</name>
+      <documentation xml:lang="en">When delivery driver scans a trolley cage that returns consignment log with "Ready for delivery" for the delivery route of the delivery driver, the delivery driver loads the trolley cage into their vehicle using Mobile Scanner running Transport Management System</documentation>
+    </relationship>
+    <relationship identifier="id-4c8b2d0b0d034b61b74499204ca704cb" source="id-3e250ffd4ada4efcaab40e5bdcb1a1d5" target="id-0c4a0f0066ec4502b5aab0549f4e61a6" xsi:type="Triggering">
+      <name xml:lang="en">Consignment at service point - Notify of fetchable parcel and fetch code</name>
+      <documentation xml:lang="en">When consignment is "at service point" log event, logyCorp ERP sends fetch notification to consumer</documentation>
+    </relationship>
+    <relationship identifier="id-82d8cd06f6364fd19a197aec55ad442e" source="id-a3f02044446a4ac2907c0c4a2a548386" target="id-343d3f1769a04e3db6860336a19449ca" xsi:type="Triggering">
+      <name xml:lang="en">Consignment fetch notified - Fetch parcel from parcel locker stated using fetch code stated</name>
+      <documentation xml:lang="en">When consumer receives a fetch notification and fetch code, the consumer knows to go fetch their parcel from the parcel locker using the given fetch code</documentation>
+    </relationship>
+    <relationship identifier="id-f507beb8df194e469237017351890fdb" source="id-d1b1aa026fc34723bdf53e28b4ca9e49" target="id-6a9116fb62914b6f966fa40a3e7dcc58" xsi:type="Triggering">
+      <name xml:lang="en">Consignment created - Create transport stop</name>
+      <documentation xml:lang="en">When consignment is at "created" status a transport stop is created</documentation>
+    </relationship>
+    <relationship identifier="id-3095b3e3c5a54347a1ed73e6dc2c73ce" source="id-e658c32b647d45c6b256bc71ec0a3692" target="id-9b9786d4714f4ef98e044cee5511e69c" xsi:type="Flow">
+      <name xml:lang="en">logyCorp ERP - Sorter</name>
+      <documentation xml:lang="en">The sorter gets the parcel's chute from logyCorp ERP</documentation>
+    </relationship>
+  </relationships>
+  <organizations>
+    <item>
+      <label xml:lang="en">Business</label>
+      <item identifierRef="id-e92b2520dd5b4bccb40049ee349c62ea" />
+      <item identifierRef="id-bc94b46c98094148b0113a71c0b3e07c" />
+      <item identifierRef="id-462411beb55d44168d2540fcd260c1c0" />
+      <item identifierRef="id-9892256d0e214fd7a3b378015d7dd64a" />
+      <item identifierRef="id-9fd60d83ac5d4034a9c2a28d750adfb6" />
+      <item identifierRef="id-1b8b11f603984be38629423f6e69beb0" />
+      <item identifierRef="id-058b9cfab72d4efa9477f2b6b244975b" />
+      <item identifierRef="id-e8da6e0724ac4565856642cabec2ed42" />
+      <item identifierRef="id-0fe1c0173a244e9fbc141714230ad1cb" />
+      <item identifierRef="id-343d3f1769a04e3db6860336a19449ca" />
+    </item>
+    <item>
+      <label xml:lang="en">Application</label>
+      <item identifierRef="id-36aef7017bb54a75b437d5d000f41bfb" />
+      <item identifierRef="id-e658c32b647d45c6b256bc71ec0a3692" />
+      <item identifierRef="id-e74ea56febfc46cd80d2d7e97215e19a" />
+      <item identifierRef="id-87ec15d8a64546289876d6600eafd035" />
+      <item identifierRef="id-cf26ff3812194954ac8d3d8259be3383" />
+      <item identifierRef="id-33c2a5cb773e480da81ac7fadc1772f4" />
+      <item identifierRef="id-fcfd5cd8de564744afc583ac2e33e63b" />
+      <item identifierRef="id-6a9116fb62914b6f966fa40a3e7dcc58" />
+      <item identifierRef="id-4eece93cdf324044a7a1a67e06532b40" />
+      <item identifierRef="id-420056dfa61e4e0fbe3a3299d173f2b5" />
+      <item identifierRef="id-0c4a0f0066ec4502b5aab0549f4e61a6" />
+      <item identifierRef="id-801c6ffcd7b945e98574f4b4bfbcaee7" />
+      <item identifierRef="id-d1b1aa026fc34723bdf53e28b4ca9e49" />
+      <item identifierRef="id-0f25c14fce9947d6a7a140fa6abd6426" />
+      <item identifierRef="id-ec78c4ba48624cd2aede15a70189bfdd" />
+      <item identifierRef="id-c546c9bb32894e889312b8a99e5c6a59" />
+      <item identifierRef="id-3e250ffd4ada4efcaab40e5bdcb1a1d5" />
+      <item identifierRef="id-a3f02044446a4ac2907c0c4a2a548386" />
+      <item identifierRef="id-50985de30af64e1bbb87a0ac47e84920" />
+      <item identifierRef="id-9175f39a0eae480e8838c1e639807d8d" />
+      <item identifierRef="id-8a0fdfcb56ba4541b80c0306002bd0e2" />
+    </item>
+    <item>
+      <label xml:lang="en">Technology &amp; Physical</label>
+      <item identifierRef="id-9b9786d4714f4ef98e044cee5511e69c" />
+      <item identifierRef="id-52e37c3f8a824a5d81176562bc165cb5" />
+      <item identifierRef="id-2c9bcd560a6b448b810e2d5cc2a8a718" />
+    </item>
+    <item>
+      <label xml:lang="en">Relations</label>
+      <item identifierRef="id-78098fe6ebdd4742a7b36876bdcc7c30" />
+      <item identifierRef="id-c52dc215c9934d298ffc3a9301b8143a" />
+      <item identifierRef="id-71f3879900434b9cba609611cf4f2334" />
+      <item identifierRef="id-fffb8d74a3504b1ab4c0c35816badff1" />
+      <item identifierRef="id-4fecd9df10db490396b103ffdb0d8ac5" />
+      <item identifierRef="id-f6f205bd59d0490f850ebba1a808beaa" />
+      <item identifierRef="id-3ba4a50cf271473cba005087658825e0" />
+      <item identifierRef="id-3d6f6ce143b64d56b3d393dec1628ddc" />
+      <item identifierRef="id-4587c0c99a2c4fe8be822e3885ab2cc0" />
+      <item identifierRef="id-91700e0d23c84ddaa74a0c35dcc0802c" />
+      <item identifierRef="id-69c9f67aa3ab41f1a8756b9b6b6a25d1" />
+      <item identifierRef="id-59c6aeb8d5714e849506dcaad08d0d21" />
+      <item identifierRef="id-294be643a38b4cd09feae8f4614349a4" />
+      <item identifierRef="id-d16d3c3da30746bba6818ec3ac9067db" />
+      <item identifierRef="id-3c2772b115fd4d1f8dc4ad960a49db14" />
+      <item identifierRef="id-5ceedd412db6426e847aa7e5bc7cdfa1" />
+      <item identifierRef="id-eabee61dd7fc48059456c898c29af38a" />
+      <item identifierRef="id-593696bfe0ad4bc88903167a6e4811e7" />
+      <item identifierRef="id-2628b493f7fa428f8cf237190b81d0cd" />
+      <item identifierRef="id-1634d106a0744977a7b62d1182d84240" />
+      <item identifierRef="id-ab4d1b9f956d4719b77736bb3ecc713c" />
+      <item identifierRef="id-a39a13c36a724d418ad478d53824064e" />
+      <item identifierRef="id-6b1823b283334a3a926ca75da7053f50" />
+      <item identifierRef="id-1e78b88a660142998d40ec2855098d33" />
+      <item identifierRef="id-d44052f5918c41acb1a9a5bedb2966bb" />
+      <item identifierRef="id-c04b91e7530e48e9be56060c64eef853" />
+      <item identifierRef="id-457cb0a7a8cb4d8ab3da941933269254" />
+      <item identifierRef="id-504a53a2a1854a87bc291e007b809a1a" />
+      <item identifierRef="id-5bc1f1144ce64207b04a9017e1e19eb7" />
+      <item identifierRef="id-36de0bef01294b99980ef9fb2e3159ad" />
+      <item identifierRef="id-64cba11f5ba94a509bf6ecd1104cb481" />
+      <item identifierRef="id-d22f3c859a65438f91c7183678563e37" />
+      <item identifierRef="id-cfe1e466d4b045a3ae12788a0f8cb912" />
+      <item identifierRef="id-ef32f6cb267f4ca1828b4bbd7ad865d0" />
+      <item identifierRef="id-44e68744fb6a4459a41de3fba9bd80f8" />
+      <item identifierRef="id-7bbae28cf11b4f52a68c5cdd1d5cd5d0" />
+      <item identifierRef="id-cc209a118a2b4464b644fdbd30fe0bb7" />
+      <item identifierRef="id-3634d23fac3c4a1bb377f41823a1c4a6" />
+      <item identifierRef="id-74c00b62c80b4c409757a5d2cd3fc3bd" />
+      <item identifierRef="id-b0657e64c591472c8e0ef854bbea067e" />
+      <item identifierRef="id-7d2f7ce9651c404486e8a5f1ac6e8162" />
+      <item identifierRef="id-1ca191c7769f464aa20224a47d9fc883" />
+      <item identifierRef="id-c186c3ae42214d7494a10da63a03b124" />
+      <item identifierRef="id-0e08a490d08a4e3299f1cb2ab354b7a5" />
+      <item identifierRef="id-22e33db589dd42f7a6184d5a4af2c8fc" />
+      <item identifierRef="id-67b319e83acc4922ab4f545bf30e9f17" />
+      <item identifierRef="id-eec5fb6f8d29409a934e76352ef9f99a" />
+      <item identifierRef="id-d0a01cceec524fffa8e696078d5f1e96" />
+      <item identifierRef="id-abdbf23303ab447388d0be26f7793532" />
+      <item identifierRef="id-4c8b2d0b0d034b61b74499204ca704cb" />
+      <item identifierRef="id-82d8cd06f6364fd19a197aec55ad442e" />
+      <item identifierRef="id-f507beb8df194e469237017351890fdb" />
+      <item identifierRef="id-3095b3e3c5a54347a1ed73e6dc2c73ce" />
+    </item>
+    <item>
+      <label xml:lang="en">Views</label>
+      <item identifierRef="id-e20fbb30eb354d249117794b12e285b6" />
+    </item>
+  </organizations>
+  <views>
+    <diagrams>
+      <view identifier="id-e20fbb30eb354d249117794b12e285b6" xsi:type="Diagram">
+        <name xml:lang="en">Process - eCom order to parcel locker</name>
+        <documentation xml:lang="en">This process diagram documents the logyCorp delivery process from consumer ordering a product delivered to a service point during their eCom purchase to the end of the consumer fetching the parcel from the parcel locker they selected. The consumer doesn't buy anything from logyCorp and isn't a direct customer of logyCorp. Instead, the eCom implicitly promises to procure a delivery from logyCorp for the consumer when the consumer selects logyCorp parcel locker delivery to a chosen location on their eCom order. logyCorp's delivery starts when the eCom creates a consignment with logyCorp's Orders API and the delivery ends when the consumer fetches the parcel from the parcel locker with a fetch code provided by logyCorp. The eCom pays logyCorp and the consumer paid the eCom. For customer service on the delivery, the consumer contacts logyCorp, for the product they contact the eCom.</documentation>
+        <node identifier="id-68008f82a5ce4f5bbca094bb7711141d" elementRef="id-e92b2520dd5b4bccb40049ee349c62ea" xsi:type="Element" x="704" y="119" w="120" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-84d770103f9d4158a025bee228c36a45" elementRef="id-36aef7017bb54a75b437d5d000f41bfb" xsi:type="Element" x="704" y="324" w="120" h="43">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-2bd12fc952af449599a63b955a001f0c" elementRef="id-e658c32b647d45c6b256bc71ec0a3692" xsi:type="Element" x="704" y="504" w="1864" h="31">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-c8c3fb1d878a4a509521f74f55a3c204" elementRef="id-e74ea56febfc46cd80d2d7e97215e19a" xsi:type="Element" x="704" y="420" w="120" h="43">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-b3e2290e370d459fb6d1b4608146ad71" elementRef="id-bc94b46c98094148b0113a71c0b3e07c" xsi:type="Element" x="704" y="204" w="120" h="55">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-b749af002c854de48ebdb614730cdbd1" elementRef="id-87ec15d8a64546289876d6600eafd035" xsi:type="Element" x="1067" y="324" w="120" h="43">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-8799ec1702c04aaab5053585d5e655d6" elementRef="id-cf26ff3812194954ac8d3d8259be3383" xsi:type="Element" x="877" y="324" w="120" h="43">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-7fc292ae77da4b34b292f521caba0571" elementRef="id-33c2a5cb773e480da81ac7fadc1772f4" xsi:type="Element" x="877" y="204" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-d54e45b49f364c16ad26a13f344ff9e7" elementRef="id-fcfd5cd8de564744afc583ac2e33e63b" xsi:type="Element" x="1067" y="204" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-c228afa4c41641b3b539189ab4d2634e" elementRef="id-6a9116fb62914b6f966fa40a3e7dcc58" xsi:type="Element" x="1248" y="204" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-015ddfd1fcf64566818193268d858ff8" elementRef="id-4eece93cdf324044a7a1a67e06532b40" xsi:type="Element" x="1248" y="324" w="120" h="61">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-d4b45e927bcb47389d4251e6c2a017de" elementRef="id-462411beb55d44168d2540fcd260c1c0" xsi:type="Element" x="1429" y="204" w="120" h="55">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-1efe41d1409b478782f22e5da7fcbf37" elementRef="id-9892256d0e214fd7a3b378015d7dd64a" xsi:type="Element" x="1429" y="119" w="120" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-e0eaa8dc191147d89f1c29c15efd8d70" elementRef="id-9fd60d83ac5d4034a9c2a28d750adfb6" xsi:type="Element" x="1596" y="204" w="120" h="55">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-32cbae9b456a4b9da2c97c334cb2faea" elementRef="id-1b8b11f603984be38629423f6e69beb0" xsi:type="Element" x="1576" y="119" w="120" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-05320b03294242068f65719fbb4d3273" elementRef="id-058b9cfab72d4efa9477f2b6b244975b" xsi:type="Element" x="1757" y="204" w="133" h="55">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-e423cdf0b30a4a6fb211fc2443adc5c7" elementRef="id-1b8b11f603984be38629423f6e69beb0" xsi:type="Element" x="1751" y="118" w="122" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-c0f46548855a4a8bb26d5da95194ecb5" elementRef="id-9b9786d4714f4ef98e044cee5511e69c" xsi:type="Element" x="1596" y="327" w="120" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-263843dbf5d24c1dba3dba9fc228dd87" elementRef="id-52e37c3f8a824a5d81176562bc165cb5" xsi:type="Element" x="1764" y="327" w="120" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-54c7f1376b2e4aad9a1fd7ba2496bbde" elementRef="id-e8da6e0724ac4565856642cabec2ed42" xsi:type="Element" x="1932" y="189" w="120" h="85">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-dff47a48db4d4a428ef9c1b65391a0ac" elementRef="id-9892256d0e214fd7a3b378015d7dd64a" xsi:type="Element" x="1955" y="118" w="120" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-28b97cab65634f219a4edf17da585950" elementRef="id-52e37c3f8a824a5d81176562bc165cb5" xsi:type="Element" x="1429" y="327" w="120" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-bb6ebaa992d9403d9df4cb0f3d8ee0e2" elementRef="id-52e37c3f8a824a5d81176562bc165cb5" xsi:type="Element" x="1932" y="300" w="97" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-52091c9a5b1c430ab4de111829def2c1" elementRef="id-4eece93cdf324044a7a1a67e06532b40" xsi:type="Element" x="1932" y="393" w="120" h="61">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-a109e52bd25443a9b046dbe929989359" elementRef="id-0fe1c0173a244e9fbc141714230ad1cb" xsi:type="Element" x="2112" y="204" w="120" h="55">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-36fe59d65c894c219ae46d10650285e4" elementRef="id-52e37c3f8a824a5d81176562bc165cb5" xsi:type="Element" x="2064" y="300" w="96" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-eb4bf8a8ce414725a10c7237c471a555" elementRef="id-4eece93cdf324044a7a1a67e06532b40" xsi:type="Element" x="2113" y="393" w="120" h="61">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-dd2aba71bfda473db404e83eb8f55855" elementRef="id-9892256d0e214fd7a3b378015d7dd64a" xsi:type="Element" x="2112" y="118" w="120" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-9de9acf15d6c42dc877a1bae0b92a116" elementRef="id-420056dfa61e4e0fbe3a3299d173f2b5" xsi:type="Element" x="2280" y="381" w="120" h="43">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-53a7c1c3232a44b2b4f2973824fcd2e7" elementRef="id-0c4a0f0066ec4502b5aab0549f4e61a6" xsi:type="Element" x="2274" y="204" w="132" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-0805a1d53a6d4cbe8898f19ba770d2dc" elementRef="id-801c6ffcd7b945e98574f4b4bfbcaee7" xsi:type="Element" x="2280" y="300" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-190b771ea70641268f8b460e3f039524" elementRef="id-343d3f1769a04e3db6860336a19449ca" xsi:type="Element" x="2448" y="204" w="120" h="85">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-5b4142dc3d2b4d889eeb0111d83a5d8c" elementRef="id-e92b2520dd5b4bccb40049ee349c62ea" xsi:type="Element" x="2448" y="118" w="120" h="26">
+          <style>
+            <fillColor r="255" g="255" b="181" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-d682fdb5d0014305acacd6c14cd0b862" elementRef="id-2c9bcd560a6b448b810e2d5cc2a8a718" xsi:type="Element" x="2172" y="300" w="96" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-289d7826387c4e3cbe02b898f37e0ddf" elementRef="id-2c9bcd560a6b448b810e2d5cc2a8a718" xsi:type="Element" x="2448" y="339" w="120" h="55">
+          <style>
+            <fillColor r="201" g="231" b="183" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-097c3ddbc9284393b5b2f7d9adc4fca2" elementRef="id-d1b1aa026fc34723bdf53e28b4ca9e49" xsi:type="Element" x="1152" y="48" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-5d8b3138002d4fe29dbd952d90f3c5bd" elementRef="id-0f25c14fce9947d6a7a140fa6abd6426" xsi:type="Element" x="1477" y="48" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-3a0184748650417eb8a86c334a33fe5e" elementRef="id-ec78c4ba48624cd2aede15a70189bfdd" xsi:type="Element" x="1656" y="18" w="120" h="43">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-d07c3c71624e41cebbebe709906d4bb7" elementRef="id-c546c9bb32894e889312b8a99e5c6a59" xsi:type="Element" x="1812" y="11" w="144" h="37">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-90ffef9de4e4462d88975af9fb1c035a" elementRef="id-3e250ffd4ada4efcaab40e5bdcb1a1d5" xsi:type="Element" x="2148" y="48" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-ea8f111d36a4416fa9100f5cbc6707be" elementRef="id-a3f02044446a4ac2907c0c4a2a548386" xsi:type="Element" x="2280" y="48" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-ca7b45325ca94253af6669adaef5d99b" elementRef="id-50985de30af64e1bbb87a0ac47e84920" xsi:type="Element" x="2472" y="48" w="120" h="55">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-93ad1fb163794de1a26612b2906448e1" elementRef="id-9175f39a0eae480e8838c1e639807d8d" xsi:type="Element" x="1608" y="67" w="120" h="36">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <node identifier="id-2f768ee3f2ff488196c71de382ead6ac" elementRef="id-8a0fdfcb56ba4541b80c0306002bd0e2" xsi:type="Element" x="1788" y="60" w="120" h="42">
+          <style>
+            <fillColor r="181" g="255" b="255" a="100" />
+            <lineColor r="92" g="92" b="92" a="100" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </node>
+        <connection identifier="id-fd7186ed5a4848bc8c977a15cf99b13b" relationshipRef="id-71f3879900434b9cba609611cf4f2334" xsi:type="Relationship" source="id-68008f82a5ce4f5bbca094bb7711141d" target="id-b3e2290e370d459fb6d1b4608146ad71">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-dfe71b7452b24c95a5b96975cbdbae01" relationshipRef="id-c52dc215c9934d298ffc3a9301b8143a" xsi:type="Relationship" source="id-84d770103f9d4158a025bee228c36a45" target="id-b3e2290e370d459fb6d1b4608146ad71">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-059bb15679d84fd9845649934503222d" relationshipRef="id-fffb8d74a3504b1ab4c0c35816badff1" xsi:type="Relationship" source="id-84d770103f9d4158a025bee228c36a45" target="id-8799ec1702c04aaab5053585d5e655d6">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-f309871957b04041b9c772c4afb264e1" relationshipRef="id-f6f205bd59d0490f850ebba1a808beaa" xsi:type="Relationship" source="id-2bd12fc952af449599a63b955a001f0c" target="id-c8c3fb1d878a4a509521f74f55a3c204">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-ded8f8acce00476c9bd646ac3b81207d" relationshipRef="id-4fecd9df10db490396b103ffdb0d8ac5" xsi:type="Relationship" source="id-2bd12fc952af449599a63b955a001f0c" target="id-b749af002c854de48ebdb614730cdbd1">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1128" y="445" />
+        </connection>
+        <connection identifier="id-c10de1e7d4a543d5a25ff7bc9042353d" relationshipRef="id-d16d3c3da30746bba6818ec3ac9067db" xsi:type="Relationship" source="id-2bd12fc952af449599a63b955a001f0c" target="id-015ddfd1fcf64566818193268d858ff8">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1308" y="469" />
+        </connection>
+        <connection identifier="id-1d5babe06fe4453189587e35dec9792a" relationshipRef="id-d22f3c859a65438f91c7183678563e37" xsi:type="Relationship" source="id-2bd12fc952af449599a63b955a001f0c" target="id-9de9acf15d6c42dc877a1bae0b92a116">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="2340" y="465" />
+        </connection>
+        <connection identifier="id-2fcbc9aaeaef4573849296578a272806" relationshipRef="id-3095b3e3c5a54347a1ed73e6dc2c73ce" xsi:type="Relationship" source="id-2bd12fc952af449599a63b955a001f0c" target="id-c0f46548855a4a8bb26d5da95194ecb5">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-9c0355f08ec944af9260773c1b1356b4" relationshipRef="id-78098fe6ebdd4742a7b36876bdcc7c30" xsi:type="Relationship" source="id-c8c3fb1d878a4a509521f74f55a3c204" target="id-84d770103f9d4158a025bee228c36a45">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="768" y="397" />
+        </connection>
+        <connection identifier="id-c2187ee5c4444e1fa05a339ffca5195a" relationshipRef="id-3ba4a50cf271473cba005087658825e0" xsi:type="Relationship" source="id-b3e2290e370d459fb6d1b4608146ad71" target="id-7fc292ae77da4b34b292f521caba0571">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-439aa30fa0f24dbb81844b3208feb4e2" relationshipRef="id-91700e0d23c84ddaa74a0c35dcc0802c" xsi:type="Relationship" source="id-b749af002c854de48ebdb614730cdbd1" target="id-2bd12fc952af449599a63b955a001f0c">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1104" y="421" />
+        </connection>
+        <connection identifier="id-7e6039166dcb4fe8aa4ebb4905e89895" relationshipRef="id-69c9f67aa3ab41f1a8756b9b6b6a25d1" xsi:type="Relationship" source="id-b749af002c854de48ebdb614730cdbd1" target="id-d54e45b49f364c16ad26a13f344ff9e7">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1129" y="301" />
+        </connection>
+        <connection identifier="id-8ea16c54181041248cb89c2b7a76bfcf" relationshipRef="id-59c6aeb8d5714e849506dcaad08d0d21" xsi:type="Relationship" source="id-8799ec1702c04aaab5053585d5e655d6" target="id-b749af002c854de48ebdb614730cdbd1">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-dccdc2f6466d4ff1936fe20e53ba4230" relationshipRef="id-3d6f6ce143b64d56b3d393dec1628ddc" xsi:type="Relationship" source="id-8799ec1702c04aaab5053585d5e655d6" target="id-7fc292ae77da4b34b292f521caba0571">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-14eb871f1c7143c6ad84765968c5349e" relationshipRef="id-4587c0c99a2c4fe8be822e3885ab2cc0" xsi:type="Relationship" source="id-7fc292ae77da4b34b292f521caba0571" target="id-d54e45b49f364c16ad26a13f344ff9e7">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-5ccd244b93f84dabbaf6a8912bdde0f8" relationshipRef="id-74c00b62c80b4c409757a5d2cd3fc3bd" xsi:type="Relationship" source="id-d54e45b49f364c16ad26a13f344ff9e7" target="id-097c3ddbc9284393b5b2f7d9adc4fca2">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-6061eefb8511452ea60ccc30322dae84" relationshipRef="id-5ceedd412db6426e847aa7e5bc7cdfa1" xsi:type="Relationship" source="id-c228afa4c41641b3b539189ab4d2634e" target="id-d4b45e927bcb47389d4251e6c2a017de">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-dbb4e78f06674c55bef7af95dd0e65a4" relationshipRef="id-294be643a38b4cd09feae8f4614349a4" xsi:type="Relationship" source="id-015ddfd1fcf64566818193268d858ff8" target="id-c228afa4c41641b3b539189ab4d2634e">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1308" y="277" />
+        </connection>
+        <connection identifier="id-b240a415b2e34d5485ab5e5bbdfab52a" relationshipRef="id-593696bfe0ad4bc88903167a6e4811e7" xsi:type="Relationship" source="id-d4b45e927bcb47389d4251e6c2a017de" target="id-e0eaa8dc191147d89f1c29c15efd8d70">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-d14cdc998a974f4d826f03e14eaeeee9" relationshipRef="id-3c2772b115fd4d1f8dc4ad960a49db14" xsi:type="Relationship" source="id-1efe41d1409b478782f22e5da7fcbf37" target="id-d4b45e927bcb47389d4251e6c2a017de">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-a93a007f760e478fb1a2af4c3fa553c7" relationshipRef="id-7d2f7ce9651c404486e8a5f1ac6e8162" xsi:type="Relationship" source="id-e0eaa8dc191147d89f1c29c15efd8d70" target="id-3a0184748650417eb8a86c334a33fe5e">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1740" y="133" />
+        </connection>
+        <connection identifier="id-b8ebcd8564ab407188ed40e9c38177ba" relationshipRef="id-b0657e64c591472c8e0ef854bbea067e" xsi:type="Relationship" source="id-e0eaa8dc191147d89f1c29c15efd8d70" target="id-5d8b3138002d4fe29dbd952d90f3c5bd">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1560" y="181" />
+        </connection>
+        <connection identifier="id-a973f113e7a34a39bf77fe990698d35b" relationshipRef="id-67b319e83acc4922ab4f545bf30e9f17" xsi:type="Relationship" source="id-e0eaa8dc191147d89f1c29c15efd8d70" target="id-93ad1fb163794de1a26612b2906448e1">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1704" y="169" />
+        </connection>
+        <connection identifier="id-42ee312f3002492588e26a490b4d63e5" relationshipRef="id-eabee61dd7fc48059456c898c29af38a" xsi:type="Relationship" source="id-32cbae9b456a4b9da2c97c334cb2faea" target="id-e0eaa8dc191147d89f1c29c15efd8d70">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-13d31390c4734cea995a8879668b1bd6" relationshipRef="id-1ca191c7769f464aa20224a47d9fc883" xsi:type="Relationship" source="id-05320b03294242068f65719fbb4d3273" target="id-d07c3c71624e41cebbebe709906d4bb7">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1919" y="121" />
+        </connection>
+        <connection identifier="id-1b64633a0ce94bb28de13748f3f224a6" relationshipRef="id-eec5fb6f8d29409a934e76352ef9f99a" xsi:type="Relationship" source="id-05320b03294242068f65719fbb4d3273" target="id-2f768ee3f2ff488196c71de382ead6ac">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1877" y="145" />
+        </connection>
+        <connection identifier="id-2e421d2249904fdd8e12c3c9479144de" relationshipRef="id-2628b493f7fa428f8cf237190b81d0cd" xsi:type="Relationship" source="id-e423cdf0b30a4a6fb211fc2443adc5c7" target="id-05320b03294242068f65719fbb4d3273">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-bf1671c6ff664aae80b5d8d1bdb1975e" relationshipRef="id-ab4d1b9f956d4719b77736bb3ecc713c" xsi:type="Relationship" source="id-c0f46548855a4a8bb26d5da95194ecb5" target="id-e0eaa8dc191147d89f1c29c15efd8d70">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-7f9167de26d34b56a1c974b600c64cfb" relationshipRef="id-1634d106a0744977a7b62d1182d84240" xsi:type="Relationship" source="id-c0f46548855a4a8bb26d5da95194ecb5" target="id-2bd12fc952af449599a63b955a001f0c">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1620" y="420" />
+        </connection>
+        <connection identifier="id-a4a3304adb014b278435facc7694d2b7" relationshipRef="id-6b1823b283334a3a926ca75da7053f50" xsi:type="Relationship" source="id-263843dbf5d24c1dba3dba9fc228dd87" target="id-2bd12fc952af449599a63b955a001f0c">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-99e12b8738d0475fba673e53132ed612" relationshipRef="id-a39a13c36a724d418ad478d53824064e" xsi:type="Relationship" source="id-263843dbf5d24c1dba3dba9fc228dd87" target="id-05320b03294242068f65719fbb4d3273">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1823" y="276" />
+        </connection>
+        <connection identifier="id-14c3cc774cce4d1dbda7f1ffbb366f0f" relationshipRef="id-36de0bef01294b99980ef9fb2e3159ad" xsi:type="Relationship" source="id-54c7f1376b2e4aad9a1fd7ba2496bbde" target="id-a109e52bd25443a9b046dbe929989359">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-c65aa0c1fb1540358a063d604727f02f" relationshipRef="id-457cb0a7a8cb4d8ab3da941933269254" xsi:type="Relationship" source="id-dff47a48db4d4a428ef9c1b65391a0ac" target="id-54c7f1376b2e4aad9a1fd7ba2496bbde">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-052f7196a6c64a668f8ed255afd1cb76" relationshipRef="id-1e78b88a660142998d40ec2855098d33" xsi:type="Relationship" source="id-28b97cab65634f219a4edf17da585950" target="id-d4b45e927bcb47389d4251e6c2a017de">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-313943aa49f343569a224d938587c9a2" relationshipRef="id-d44052f5918c41acb1a9a5bedb2966bb" xsi:type="Relationship" source="id-28b97cab65634f219a4edf17da585950" target="id-015ddfd1fcf64566818193268d858ff8">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-da42bbd1322a4f319bfdfba79fb129b4" relationshipRef="id-d44052f5918c41acb1a9a5bedb2966bb" xsi:type="Relationship" source="id-bb6ebaa992d9403d9df4cb0f3d8ee0e2" target="id-52091c9a5b1c430ab4de111829def2c1">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-9d80d9c79b524693acd11ad6866fb313" relationshipRef="id-c04b91e7530e48e9be56060c64eef853" xsi:type="Relationship" source="id-bb6ebaa992d9403d9df4cb0f3d8ee0e2" target="id-54c7f1376b2e4aad9a1fd7ba2496bbde">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-ad190795044c4973b1469b256f8a1b60" relationshipRef="id-c186c3ae42214d7494a10da63a03b124" xsi:type="Relationship" source="id-a109e52bd25443a9b046dbe929989359" target="id-90ffef9de4e4462d88975af9fb1c035a">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="2244" y="145" />
+        </connection>
+        <connection identifier="id-9c12972cd85a4fcfa2c3160664c1cc7b" relationshipRef="id-d44052f5918c41acb1a9a5bedb2966bb" xsi:type="Relationship" source="id-36fe59d65c894c219ae46d10650285e4" target="id-eb4bf8a8ce414725a10c7237c471a555">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-e38ba35712644f86940c326a8493d85f" relationshipRef="id-504a53a2a1854a87bc291e007b809a1a" xsi:type="Relationship" source="id-36fe59d65c894c219ae46d10650285e4" target="id-a109e52bd25443a9b046dbe929989359">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-d3a7da2a273b465689a0b953e5b414ec" relationshipRef="id-5bc1f1144ce64207b04a9017e1e19eb7" xsi:type="Relationship" source="id-eb4bf8a8ce414725a10c7237c471a555" target="id-2bd12fc952af449599a63b955a001f0c">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="2172" y="480" />
+        </connection>
+        <connection identifier="id-0b95b74afd3a448f93ab84f8f5ba487f" relationshipRef="id-64cba11f5ba94a509bf6ecd1104cb481" xsi:type="Relationship" source="id-dd2aba71bfda473db404e83eb8f55855" target="id-a109e52bd25443a9b046dbe929989359">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-4a919d8555f54ef191d62c8257c0d284" relationshipRef="id-cfe1e466d4b045a3ae12788a0f8cb912" xsi:type="Relationship" source="id-9de9acf15d6c42dc877a1bae0b92a116" target="id-0805a1d53a6d4cbe8898f19ba770d2dc">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-75d87c363049402c9b23bfbee80a6e8f" relationshipRef="id-0e08a490d08a4e3299f1cb2ab354b7a5" xsi:type="Relationship" source="id-53a7c1c3232a44b2b4f2973824fcd2e7" target="id-ea8f111d36a4416fa9100f5cbc6707be">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-9a3ebbf0b7d140c695ca17da607feeb5" relationshipRef="id-ef32f6cb267f4ca1828b4bbd7ad865d0" xsi:type="Relationship" source="id-0805a1d53a6d4cbe8898f19ba770d2dc" target="id-53a7c1c3232a44b2b4f2973824fcd2e7">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-19f7763d55404d68af5f7c95989b4565" relationshipRef="id-22e33db589dd42f7a6184d5a4af2c8fc" xsi:type="Relationship" source="id-190b771ea70641268f8b460e3f039524" target="id-ca7b45325ca94253af6669adaef5d99b">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="2580" y="152" />
+        </connection>
+        <connection identifier="id-822abaf57ad24498a327b68a81e3466d" relationshipRef="id-44e68744fb6a4459a41de3fba9bd80f8" xsi:type="Relationship" source="id-5b4142dc3d2b4d889eeb0111d83a5d8c" target="id-190b771ea70641268f8b460e3f039524">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-c387d62ed5b64de1acf7305a4dbff6a7" relationshipRef="id-7bbae28cf11b4f52a68c5cdd1d5cd5d0" xsi:type="Relationship" source="id-d682fdb5d0014305acacd6c14cd0b862" target="id-a109e52bd25443a9b046dbe929989359">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-fe72c0ef61ea4ddca9b465b8bb08f6f1" relationshipRef="id-cc209a118a2b4464b644fdbd30fe0bb7" xsi:type="Relationship" source="id-289d7826387c4e3cbe02b898f37e0ddf" target="id-190b771ea70641268f8b460e3f039524">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-e22c0a9fbff34c5a9db9f4a363e126b3" relationshipRef="id-3634d23fac3c4a1bb377f41823a1c4a6" xsi:type="Relationship" source="id-289d7826387c4e3cbe02b898f37e0ddf" target="id-2bd12fc952af449599a63b955a001f0c">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="2520" y="444" />
+        </connection>
+        <connection identifier="id-eed33d44982d4005b314ea98d55633b4" relationshipRef="id-f507beb8df194e469237017351890fdb" xsi:type="Relationship" source="id-097c3ddbc9284393b5b2f7d9adc4fca2" target="id-c228afa4c41641b3b539189ab4d2634e">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1260" y="181" />
+        </connection>
+        <connection identifier="id-27c597a2f916453c8715c95341df6cc9" relationshipRef="id-d0a01cceec524fffa8e696078d5f1e96" xsi:type="Relationship" source="id-3a0184748650417eb8a86c334a33fe5e" target="id-05320b03294242068f65719fbb4d3273">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+          <bendpoint x="1745" y="145" />
+        </connection>
+        <connection identifier="id-20ddc3d94df34f048da30459b4449a87" relationshipRef="id-abdbf23303ab447388d0be26f7793532" xsi:type="Relationship" source="id-d07c3c71624e41cebbebe709906d4bb7" target="id-54c7f1376b2e4aad9a1fd7ba2496bbde">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-851da1023224469aa3fa2aca603c059e" relationshipRef="id-4c8b2d0b0d034b61b74499204ca704cb" xsi:type="Relationship" source="id-90ffef9de4e4462d88975af9fb1c035a" target="id-53a7c1c3232a44b2b4f2973824fcd2e7">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+        <connection identifier="id-fa4ef8c3b30046fd9190a5c12686a97b" relationshipRef="id-82d8cd06f6364fd19a197aec55ad442e" xsi:type="Relationship" source="id-ea8f111d36a4416fa9100f5cbc6707be" target="id-190b771ea70641268f8b460e3f039524">
+          <style>
+            <lineColor r="0" g="0" b="0" />
+            <font name="Segoe UI" size="9">
+              <color r="0" g="0" b="0" />
+            </font>
+          </style>
+        </connection>
+      </view>
+    </diagrams>
+  </views>
+</model>
