@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model xmlns="http://www.opengroup.org/xsd/archimate/3.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengroup.org/xsd/archimate/3.0/ http://www.opengroup.org/xsd/archimate/3.1/archimate3_Diagram.xsd" identifier="id-47e42b8c13044ca9987615bcd5cc3498">
   <name xml:lang="en">archiAgent</name>
+  <documentation xml:lang="en">Single Process diagram to demo LLM RAG-bot using the XML as knowledge base.</documentation>
   <elements>
     <element identifier="id-e92b2520dd5b4bccb40049ee349c62ea" xsi:type="BusinessActor">
       <name xml:lang="en">Consumer</name>

@@ -2,6 +2,8 @@ from typing import List, Dict, Optional
 from langchain_core.language_models.base import BaseLanguageModel, Runnable
 
 import sys
+import time
+import threading
 from pathlib import Path
 
 import xml.etree.ElementTree as et
@@ -16,20 +18,70 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
+from operator import itemgetter 
 
 OLLAMA_EMBEDDING_MODEL = "nomic-embed-text"
-DEFAULT_LLM_MODEL = "deepseek-r1"
+DEFAULT_LLM_MODEL = "mistral:7b"
 FAISS_INDEX_PATH = "facts_faiss_index"
 try:
     ARCHI_XML_PATH = max(list(Path(__file__).parent.glob('*.xml')), key=lambda p: p.stat().st_mtime)
     tree = et.parse(ARCHI_XML_PATH)
     root = tree.getroot()
-    et_elements = root[1]
-    et_relationships = root[2]
+    et_elements = root[2]
+    et_relationships = root[3]
     ARCHIMATE_NAMESPACE = "{http://www.opengroup.org/xsd/archimate/3.0/}"
     XSI_NAMESPACE = "{http://www.w3.org/2001/XMLSchema-instance}"
 except:
     print(f"Cannot find Archi-export XML. Ensure the python-script is in the same folder with the sole XML-file in that folder.")
+
+class Spinner:
+    def __init__(self, message="Processing...", delay=0.1):
+        self.spinner_chars = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+        self.delay = delay
+        self.message = message
+        self.running = False
+        self.spinner_thread = None
+        self.stop_event = threading.Event()
+
+    def _spinning_thread(self):
+        thread_start_time = time.time()
+        i = 0
+        while not self.stop_event.is_set():
+            char = self.spinner_chars[i % len(self.spinner_chars)]
+            elapsed_seconds = int(time.time() - thread_start_time)
+            minutes = elapsed_seconds // 60
+            seconds = elapsed_seconds % 60
+
+            time_str = f"{minutes:02d}:{seconds:02d}"
+            full_line = f"\r{char} {self.message} ({time_str})"
+
+            sys.stdout.write(full_line)
+            sys.stdout.flush()
+
+            sys.stdout.write(' ' * (max(0, self.last_line_len - len(full_line) + 1)) + "\r")
+            self.last_line_len = len(full_line)
+
+            time.sleep(self.delay)
+            i += 1
+
+    def start(self):
+        if not self.running:
+            self.running = True
+            self.stop_event.clear()
+            self.start_time = time.time()
+            self.last_line_len = 0
+            self.spinner_thread = threading.Thread(target=self._spinning_thread)
+            self.spinner_thread.daemon = True
+            self.spinner_thread.start()
+
+    def stop(self):
+        if self.running:
+            self.stop_event.set()
+            if self.spinner_thread and self.spinner_thread.is_alive():
+                self.spinner_thread.join(timeout=0.5)
+            sys.stdout.write("\r" + " " * (len(self.message) + 5) + "\r")
+            sys.stdout.flush()
+            self.running = False
 
 def should_vector_db_update() -> bool:
     user_input = input("Do you want to update the vector database before starting? Answer Y or N: ")
@@ -94,42 +146,103 @@ def combine_facts_to_langchain_document(facts) -> List[Document]:
 
 def vectorise_langchain_document_into_faiss(document, OLLAMA_EMBEDDING_MODEL, FAISS_INDEX_PATH) -> FAISS:
     print("Starting to initialise FAISS. This may take a minute")
+    spinner = Spinner("Intialising FAISS...", delay=0.1)
+    spinner.start()
     embeddings = OllamaEmbeddings(model=OLLAMA_EMBEDDING_MODEL)
     vectorstore = FAISS.from_documents(document, embeddings)
     vectorstore.save_local(FAISS_INDEX_PATH)
     loaded_vectorstore = FAISS.load_local(FAISS_INDEX_PATH, embeddings, allow_dangerous_deserialization=True)
+    spinner.stop()
     print("FAISS index loaded")
     return loaded_vectorstore
 
 def load_faiss_index(OLLAMA_EMBEDDING_MODEL, FAISS_INDEX_PATH) -> Optional[FAISS]:
-    return
+    print("Starting to initialise FAISS.")
+    embeddings = OllamaEmbeddings(model=OLLAMA_EMBEDDING_MODEL)
+    _ = embeddings.embed_query("test")
+    loaded_vectorstore = FAISS.load_local(FAISS_INDEX_PATH, embeddings, allow_dangerous_deserialization=True)
+    print("FAISS index loaded")
+    return loaded_vectorstore
 
-def ask_llm_to_use(DEFAULT_LLM_MODEL) -> Optional[str]:
-    return
+def ask_llm_to_use(DEFAULT_LLM_MODEL) -> str:
+    uses_default_LLM  = input(f"Do you want to use the default LLM {DEFAULT_LLM_MODEL} model? (Y/N): ")
+    if uses_default_LLM.lower() in ('y', 'yes'):
+        return DEFAULT_LLM_MODEL
+    else: 
+        custom_LLM = input("See Ollama.com on how to install a local model. Bind your chosen LLM to be used in this script: ")
+        return custom_LLM.lower()
 
-def load_llm(chosen_llm) -> Optional[BaseLanguageModel]:
-    return
+def load_llm(chosen_llm) -> BaseLanguageModel:
+    llm = OllamaLLM(model=chosen_llm, num_predict=768, num_ctx=4096)
+    return llm
 
 def ask_how_many_facts_to_retrive() -> int:
-    return
-
+    fact_amount = input("How many facts should the RAG use? 20 is recommended. Only use numbers (0-9): ")
+    if fact_amount.isdigit():
+        return int(fact_amount)
+    else:
+        print(f"You used letters (e.g. 'five'). Please retry using only numbers.\n")
+        ask_how_many_facts_to_retrive()
+    
 def will_facts_be_shown_with_answer() -> bool:
-    return
+    fact_shown = input("Do you want to see all the facts the LLM will use as context before the answer (Y/N): ")
+    if fact_shown.lower() in ('y', 'yes'):
+        return True
+    else: 
+        return False
 
-def get_facts_for_rag() -> List[Dict[str, str]]:
-    return
+def setup_rag_chain(llm, retriever) -> Runnable:
+    prompt = ChatPromptTemplate.from_template("""
+    You are an expert enterprise architect chatbot providing information based on the provided ArchiMate model context and knowledge of software architecture.
+    Carefully analyze the context and provide a comprehensive and detailed answer to the user's question.
+    Synthesize information from multiple parts of the context or your understanding of software architecture if necessary.
 
-def create_rag_prompt() -> ChatPromptTemplate:
-    return
+    Context:
+    {context}
 
-def setup_rag_chain(llm, vectorstore, prompt, k_retrived_amount) -> Runnable:
-    return
+    Question:
+    {question}
+    """)
 
-def run_chat_loop(rag, are_facts_shown) -> None:
-    return
+    rag_chain = (
+        {
+            "context": itemgetter("question") | retriever | (lambda docs: "\n\n".join(doc.page_content for doc in docs)),
+            "question": itemgetter("question")
+        }
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+    return rag_chain
+
+def run_chat_loop(rag, retriever, are_facts_shown) -> None:
+    print("\n--- ArchiMate Chatbot Ready ---")
+    print("Type your questions, or 'exit' to quit.")
+    spinner = Spinner(message="Thinking...", delay=0.1)
+    while True:
+        question = input("\nYour question: ")
+        if question.lower() in ('exit','quit', 'close'):
+            print("Exiting chatbot. Goodbye!")
+            break
+        retrived = retriever.invoke(question)
+        context_text = "\n\n".join(doc.page_content for doc in retrived)
+
+        if are_facts_shown:
+            print("\n--- Retrived context: ---\n")
+            for idx, doc in enumerate(retrived):
+                print(f"{idx+1}: {doc.page_content}\n")
+                print("---------------------------\n")
+        try:
+            print("\n--- Answer (this usually takes a few minutes for non-GPU-laptops using 8b-models) ---\n")
+            spinner.start()
+            response = rag.invoke({"context": context_text, "question": question})
+            print(response)
+            spinner.stop()
+        except Exception as e:
+            spinner.stop()
+            print(f"An error occurred during response generation: {e}")
 
 def main():
-    print("main started")
     if should_vector_db_update():
         elements = df_from_XML(et_elements)
         relationships = df_from_XML(et_relationships)
@@ -144,11 +257,11 @@ def main():
     if llm is None:
         return
     
-    prompt = create_rag_prompt()
     k_retrived_amount = ask_how_many_facts_to_retrive()
+    retriever = vectorstore.as_retriever(search_kwargs={"k": k_retrived_amount})
     are_facts_shown = will_facts_be_shown_with_answer()
-    rag = setup_rag_chain(llm, vectorstore, prompt, k_retrived_amount)
-    run_chat_loop(rag, are_facts_shown)
+    rag = setup_rag_chain(llm, retriever)
+    run_chat_loop(rag, retriever, are_facts_shown)
 
 if __name__ == "__main__": 
     main()
