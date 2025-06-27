@@ -16,25 +16,41 @@ archiAgent.py will run on the command line and convert an Archi xml-export into 
 	1. [Archi XMLs online](https://github.com/archimatetool/ArchiModels) are often very old and incompatible format to the script. If you download them, get the .archimate-file and make the XML-export in Archi
 	2. The Archi file must have a name and documentation to work!
 	3. The more documentation you write for the processes and relationships (often skipped), the better the facts!
-![[Pasted image 20250627135557.png]]
-2. Only update the vector database if you have updated the XML file
-3. The mistral:7b model will answer in around a minute with laptops without GPUs. More open-ended questions benefit from deepseek-r1:8b, with around 3-6 minute answer time
-4. The more facts you select for context, the slower the answer will be. Over 20 facts appeared to not improve context much.
-![[Pasted image 20250627140124.png]]
-5. The context window and answer length have been choked to speed answer times, so the chatbot won't remember the ongoing discussion.
-![[Pasted image 20250627140515.png]]
-6. Write `exit` to close chatbot
-![[Pasted image 20250627140811.png]]
-7. Try different models and fact amounts to get different answers
-![[Pasted image 20250627141354.png]]
+
+![Pasted image 20250627135557](https://github.com/user-attachments/assets/a49cb1a8-7899-4cb7-af27-cafd7ab960db)
+
+3. Only update the vector database if you have updated the XML file
+4. The mistral:7b model will answer in around a minute with laptops without GPUs. More open-ended questions benefit from deepseek-r1:8b, with around 3-6 minute answer time
+5. The more facts you select for context, the slower the answer will be. Over 20 facts appeared to not improve context much.
+
+![Pasted image 20250627140124](https://github.com/user-attachments/assets/2d59b523-2a22-4552-b265-687f08b260fd)
+
+6. The context window and answer length have been choked to speed answer times, so the chatbot won't remember the ongoing discussion.
+
+![Pasted image 20250627140515](https://github.com/user-attachments/assets/5979992e-3438-4b8b-8c54-738158167206)
+
+7. Write `exit` to close chatbot
+
+![Pasted image 20250627140811](https://github.com/user-attachments/assets/09882fef-a1fd-44c8-bcca-346e76bfd8ad)
+
+8. Try different models and fact amounts to get different answers
+
+![Pasted image 20250627141144](https://github.com/user-attachments/assets/97df024e-3288-4bd2-a3b2-51ecea4a44dd)
+
+![Pasted image 20250627141354](https://github.com/user-attachments/assets/bae0117c-3e6d-4745-aded-a22c54a05133)
 *deepseek's "thinking" mode ate up the entire answer length so the answer is just reasoning about the question with it* 
-8. Fill in your relationship and business process descriptions in Archi to get better facts
-![[Pasted image 20250627141826.png]]
+
+9. Fill in your relationship and business process descriptions in Archi to get better facts
+
+![Pasted image 20250627141824](https://github.com/user-attachments/assets/b55a65c9-68ec-46e1-b6de-d9c0fca8013f)
 *the demo "logyCorp" has all its relationships and business processes documented*
-![[Pasted image 20250627141938.png]]
-![[Pasted image 20250627142107.png]]
+
+![Pasted image 20250627141938](https://github.com/user-attachments/assets/593c3dc3-03df-48c2-9f33-99bc93fffacc)
+
+![Pasted image 20250627142107](https://github.com/user-attachments/assets/2ff3dfb9-508e-42b2-a21f-1804f424593d)
 *the demo "metalArchi" doesn't have documentation for its relationships and business processes*
-![[Pasted image 20250627142219.png]]
+
+![Pasted image 20250627142219](https://github.com/user-attachments/assets/9b4c6ede-aa7c-44ac-8f64-f5e9dfa7973e)
 
 ## How it works
 1. Selects the most recent XML file in the folder and accesses it's elements and relationships (which are flattened from all views, so no view-specific context, i.e., where relationships are)
